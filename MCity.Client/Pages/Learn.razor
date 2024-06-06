@@ -17,6 +17,27 @@
                 <div class="sub-item">Subitem</div>
             </div>
         </div>
+        <div class="topic">
+            <div class="title" @onclick="@(() => ToggleSubset(1))">Deed</div>
+            <div class="subset" style="@($"display: {(IsSubsetVisible[1] ? "flex" : "none")}")">
+                <div class="sub-item">Subitem</div>
+                <div class="sub-item">Subitem</div>
+            </div>
+        </div>
+        <div class="topic">
+            <div class="title" @onclick="@(() => ToggleSubset(1))">Section</div>
+            <div class="subset" style="@($"display: {(IsSubsetVisible[1] ? "flex" : "none")}")">
+                <div class="sub-item">Subitem</div>
+                <div class="sub-item">Subitem</div>
+            </div>
+        </div>
+        <div class="topic">
+            <div class="title" @onclick="@(() => ToggleSubset(1))">Tutorials</div>
+            <div class="subset" style="@($"display: {(IsSubsetVisible[1] ? "flex" : "none")}")">
+                <div class="sub-item">Subitem</div>
+                <div class="sub-item">Subitem</div>
+            </div>
+        </div>
     </div>
     <div class="content">
         <div class="title">Title</div>
