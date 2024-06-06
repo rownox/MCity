@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCity", "MCity\MCity.csproj", "{93B1BE72-00D5-4A11-80C0-0DA32AB80B4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MCity", "MCity\MCity.csproj", "{93B1BE72-00D5-4A11-80C0-0DA32AB80B4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCity.Client", "MCity.Client\MCity.Client.csproj", "{8660DC22-BC7C-41D9-82EB-F5AE771C9528}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MCity.Client", "MCity.Client\MCity.Client.csproj", "{8660DC22-BC7C-41D9-82EB-F5AE771C9528}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

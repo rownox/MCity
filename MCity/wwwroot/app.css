@@ -1,51 +1,148 @@
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+:root {
+    --gray1: #101011;
+    --gray2: #1a1c21;
+    --gray3: #25272b;
+    --gray4: #3a3d46;
+    --gray5: #727582;
+    --nav-text: #a5a8b6;
+    --text1: #ffffff;
+    --text2: #828282;
+    --text3: #000000;
 }
 
-a, .btn-link {
-    color: #006bb7;
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-.content {
-    padding-top: 1.1rem;
-}
-
-h1:focus {
-    outline: none;
-}
-
-.valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
-}
-
-.invalid {
-    outline: 1px solid #e50000;
-}
-
-.validation-message {
-    color: #e50000;
-}
-
-.blazor-error-boundary {
-    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIG92ZXJmbG93PSJoaWRkZW4iPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2xpcDAiPjxyZWN0IHg9IjIzNSIgeT0iNTEiIHdpZHRoPSI1NiIgaGVpZ2h0PSI0OSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzUgLTUxKSI+PHBhdGggZD0iTTI2My41MDYgNTFDMjY0LjcxNyA1MSAyNjUuODEzIDUxLjQ4MzcgMjY2LjYwNiA1Mi4yNjU4TDI2Ny4wNTIgNTIuNzk4NyAyNjcuNTM5IDUzLjYyODMgMjkwLjE4NSA5Mi4xODMxIDI5MC41NDUgOTIuNzk1IDI5MC42NTYgOTIuOTk2QzI5MC44NzcgOTMuNTEzIDI5MSA5NC4wODE1IDI5MSA5NC42NzgyIDI5MSA5Ny4wNjUxIDI4OS4wMzggOTkgMjg2LjYxNyA5OUwyNDAuMzgzIDk5QzIzNy45NjMgOTkgMjM2IDk3LjA2NTEgMjM2IDk0LjY3ODIgMjM2IDk0LjM3OTkgMjM2LjAzMSA5NC4wODg2IDIzNi4wODkgOTMuODA3MkwyMzYuMzM4IDkzLjAxNjIgMjM2Ljg1OCA5Mi4xMzE0IDI1OS40NzMgNTMuNjI5NCAyNTkuOTYxIDUyLjc5ODUgMjYwLjQwNyA1Mi4yNjU4QzI2MS4yIDUxLjQ4MzcgMjYyLjI5NiA1MSAyNjMuNTA2IDUxWk0yNjMuNTg2IDY2LjAxODNDMjYwLjczNyA2Ni4wMTgzIDI1OS4zMTMgNjcuMTI0NSAyNTkuMzEzIDY5LjMzNyAyNTkuMzEzIDY5LjYxMDIgMjU5LjMzMiA2OS44NjA4IDI1OS4zNzEgNzAuMDg4N0wyNjEuNzk1IDg0LjAxNjEgMjY1LjM4IDg0LjAxNjEgMjY3LjgyMSA2OS43NDc1QzI2Ny44NiA2OS43MzA5IDI2Ny44NzkgNjkuNTg3NyAyNjcuODc5IDY5LjMxNzkgMjY3Ljg3OSA2Ny4xMTgyIDI2Ni40NDggNjYuMDE4MyAyNjMuNTg2IDY2LjAxODNaTTI2My41NzYgODYuMDU0N0MyNjEuMDQ5IDg2LjA1NDcgMjU5Ljc4NiA4Ny4zMDA1IDI1OS43ODYgODkuNzkyMSAyNTkuNzg2IDkyLjI4MzcgMjYxLjA0OSA5My41Mjk1IDI2My41NzYgOTMuNTI5NSAyNjYuMTE2IDkzLjUyOTUgMjY3LjM4NyA5Mi4yODM3IDI2Ny4zODcgODkuNzkyMSAyNjcuMzg3IDg3LjMwMDUgMjY2LjExNiA4Ni4wNTQ3IDI2My41NzYgODYuMDU0N1oiIGZpbGw9IiNGRkU1MDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48L3N2Zz4=) no-repeat 1rem/1.8rem, #b32121;
-    padding: 1rem 1rem 1rem 3.7rem;
+body {
+    background-color: var(--gray1);
     color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-    .blazor-error-boundary::after {
-        content: "An error has occurred."
+    body nav {
+        background-color: #000000;
+        display: flex;
+        justify-content: center;
+        padding: 10px;
     }
 
-.darker-border-checkbox.form-check-input {
-    border-color: #929292;
+        body nav .content {
+            max-width: 70%;
+            width: 1500px;
+            display: flex;
+        }
+
+            body nav .content .links {
+                display: flex;
+                list-style: none;
+                gap: 10px;
+            }
+
+                body nav .content .links .link {
+                    text-decoration: none;
+                    font-size: 20px;
+                    color: var(--nav-text);
+                }
+
+.main-ctnr {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+    .main-ctnr .games-ctnr {
+        padding-top: 50px;
+        max-width: 70%;
+        width: 1500px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: center;
+        color: var(--text1);
+    }
+
+        .main-ctnr .games-ctnr .game {
+            border-radius: 10px;
+            width: 230px;
+            height: 300px;
+            background-color: var(--gray4);
+            padding: 10px;
+        }
+
+            .main-ctnr .games-ctnr .game .title {
+                font-size: 30px;
+            }
+
+            .main-ctnr .games-ctnr .game .thumbnail {
+            }
+
+            .main-ctnr .games-ctnr .game .description {
+            }
+
+    .main-ctnr .learn-ctnr {
+        max-width: 70%;
+        width: 1500px;
+        padding-top: 50px;
+        display: flex;
+    }
+
+        .main-ctnr .learn-ctnr .side-nav {
+            width: 220px;
+        }
+
+            .main-ctnr .learn-ctnr .side-nav .topic {
+            }
+
+                .main-ctnr .learn-ctnr .side-nav .topic .title {
+                    padding-left: 5px;
+                    border-bottom: 1px solid var(--gray5);
+                    background-color: var(--gray3);
+                    font-weight: bold;
+                    cursor: pointer;
+                    user-select: none;
+                }
+
+                .main-ctnr .learn-ctnr .side-nav .topic .subset {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                    .main-ctnr .learn-ctnr .side-nav .topic .subset .sub-item {
+                        cursor: pointer;
+                        user-select: none;
+                        padding-left: 15px;
+                        border-bottom: 1px solid var(--gray4);
+                    }
+
+                        .main-ctnr .learn-ctnr .side-nav .topic .subset .sub-item:hover {
+                            background-color: var(--gray2);
+                        }
+
+        .main-ctnr .learn-ctnr .content {
+            padding: 0 30px;
+        }
+
+            .main-ctnr .learn-ctnr .content .title {
+                font-size: 30px;
+            }
+
+            .main-ctnr .learn-ctnr .content .subtitle {
+            }
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
 }
