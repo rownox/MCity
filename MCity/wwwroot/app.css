@@ -1,5 +1,6 @@
 :root {
-    --gray1: #101011;
+    --black: #000000;
+    --gray1: #19191a;
     --gray2: #1a1c21;
     --gray3: #25272b;
     --gray4: #3a3d46;
@@ -29,31 +30,6 @@ body {
     flex-direction: column;
     justify-content: center;
 }
-
-    body nav {
-        background-color: #000000;
-        display: flex;
-        justify-content: center;
-        padding: 10px;
-    }
-
-        body nav .content {
-            max-width: 70%;
-            width: 1500px;
-            display: flex;
-        }
-
-            body nav .content .links {
-                display: flex;
-                list-style: none;
-                gap: 10px;
-            }
-
-                body nav .content .links .link {
-                    text-decoration: none;
-                    font-size: 20px;
-                    color: var(--nav-text);
-                }
 
 .main-ctnr {
     width: 100%;

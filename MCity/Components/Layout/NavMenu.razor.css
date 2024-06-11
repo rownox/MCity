@@ -1,1 +1,38 @@
-﻿
+﻿.navbar {
+    background-color: var(--black);
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    width: 100%;
+}
+    .navbar .container {
+        width: 80%;
+        max-width: 95%;
+        width: 1500px;
+        display: flex;
+        height: 100%;
+    }
+        .navbar .container .left {
+            height: 100%;
+        }
+        .navbar .container .mid {
+            height: 100%;
+            display: flex;
+            flex-grow: 1;
+        }
+        .navbar .container .right {
+            height: 100%;
+        }
+        .navbar .container .links {
+            display: flex;
+            list-style: none;
+            gap: 10px;
+        }
+            .navbar .container .links .link {
+                text-decoration: none;
+                font-size: 20px;
+                color: var(--nav-text);
+            }
+
+
+

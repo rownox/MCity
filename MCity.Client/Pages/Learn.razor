@@ -3,41 +3,16 @@
 
 <div class="learn-ctnr">
     <div class="side-nav">
-        <div class="topic">
-            <div class="title" @onclick="@(() => ToggleSubset(0))">Hadee</div>
-            <div class="subset" style="@($"display: {(IsSubsetVisible[0] ? "flex" : "none")}")">
-                <div class="sub-item">Subitem Subitem Subitem Subitem Subitem Subitem Subitem</div>
-                <div class="sub-item">Subitem</div>
+        @foreach (var topic in Topics) {
+            <div class="topic">
+                <div class="title" @onclick="@(() => ToggleSubset(topic.Id))">@topic.Name</div>
+                <div class="subset" style="@($"display: {(topic.IsSubsetVisible ? "flex" : "none")}")">
+                    @foreach (var subItem in topic.SubItems) {
+                        <div class="sub-item">@subItem</div>
+                    }
+                </div>
             </div>
-        </div>
-        <div class="topic">
-            <div class="title" @onclick="@(() => ToggleSubset(1))">Read</div>
-            <div class="subset" style="@($"display: {(IsSubsetVisible[1] ? "flex" : "none")}")">
-                <div class="sub-item">Subitem</div>
-                <div class="sub-item">Subitem</div>
-            </div>
-        </div>
-        <div class="topic">
-            <div class="title" @onclick="@(() => ToggleSubset(1))">Deed</div>
-            <div class="subset" style="@($"display: {(IsSubsetVisible[1] ? "flex" : "none")}")">
-                <div class="sub-item">Subitem</div>
-                <div class="sub-item">Subitem</div>
-            </div>
-        </div>
-        <div class="topic">
-            <div class="title" @onclick="@(() => ToggleSubset(1))">Section</div>
-            <div class="subset" style="@($"display: {(IsSubsetVisible[1] ? "flex" : "none")}")">
-                <div class="sub-item">Subitem</div>
-                <div class="sub-item">Subitem</div>
-            </div>
-        </div>
-        <div class="topic">
-            <div class="title" @onclick="@(() => ToggleSubset(1))">Tutorials</div>
-            <div class="subset" style="@($"display: {(IsSubsetVisible[1] ? "flex" : "none")}")">
-                <div class="sub-item">Subitem</div>
-                <div class="sub-item">Subitem</div>
-            </div>
-        </div>
+        }
     </div>
     <div class="content">
         <div class="title">Title</div>
@@ -46,9 +21,23 @@
 </div>
 
 @code {
-    private bool[] IsSubsetVisible = new bool[2];
+    private class Topic {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public bool IsSubsetVisible { get; set; }
+        public List<string> SubItems { get; set; }
+    }
+
+    private List<Topic> Topics = new List<Topic>
+        {
+        new Topic { Id = 0, Name = "Hadee", IsSubsetVisible = false, SubItems = new List<string> { "Subitem Subitem Subitem Subitem Subitem Subitem Subitem", "Subitem" }},
+        new Topic { Id = 1, Name = "Read", IsSubsetVisible = false, SubItems = new List<string> { "Subitem", "Subitem" }},
+        new Topic { Id = 2, Name = "Deed", IsSubsetVisible = false, SubItems = new List<string> { "Subitem", "Subitem" }},
+        new Topic { Id = 3, Name = "Section", IsSubsetVisible = false, SubItems = new List<string> { "Subitem", "Subitem" }},
+        new Topic { Id = 4, Name = "Tutorials", IsSubsetVisible = false, SubItems = new List<string> { "Subitem", "Subitem" }}
+    };
 
     private void ToggleSubset(int index) {
-        IsSubsetVisible[index] = !IsSubsetVisible[index];
+        Topics[index].IsSubsetVisible = !Topics[index].IsSubsetVisible;
     }
 }
