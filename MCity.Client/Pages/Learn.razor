@@ -1,5 +1,5 @@
 ﻿@page "/learn"
-@rendermode InteractiveAuto
+@rendermode InteractiveWebAssembly
 
 <div class="learn-ctnr">
     <div class="side-nav">
@@ -20,7 +20,29 @@
     </div>
 </div>
 
+@if (learnPages == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <ul>
+        @foreach (var learnPage in learnPages) {
+            <li>@learnPage.Title</li>
+        }
+    </ul>
+}
+
 @code {
+    private List<Shared.Models.LearnPage> learnPages;
+
+    protected override async Task OnInitializedAsync() {
+        await base.OnInitializedAsync();
+
+        //learnPages = await Http.GetFromJsonAsync<List<Shared.Models.LearnPage>>("/api/LearnPages");
+
+    }
+
     private class Topic {
         public int Id { get; set; }
         public string Name { get; set; }

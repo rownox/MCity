@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MCity", "MCity\MCity.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MCity.Client", "MCity.Client\MCity.Client.csproj", "{8660DC22-BC7C-41D9-82EB-F5AE771C9528}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{1E252FD6-87F8-48B7-A536-75EF62EED4A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{8660DC22-BC7C-41D9-82EB-F5AE771C9528}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8660DC22-BC7C-41D9-82EB-F5AE771C9528}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8660DC22-BC7C-41D9-82EB-F5AE771C9528}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E252FD6-87F8-48B7-A536-75EF62EED4A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E252FD6-87F8-48B7-A536-75EF62EED4A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E252FD6-87F8-48B7-A536-75EF62EED4A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E252FD6-87F8-48B7-A536-75EF62EED4A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
