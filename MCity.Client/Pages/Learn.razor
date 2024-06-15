@@ -40,7 +40,6 @@ else
         await base.OnInitializedAsync();
 
         //learnPages = await Http.GetFromJsonAsync<List<Shared.Models.LearnPage>>("/api/LearnPages");
-
     }
 
     private class Topic {
@@ -52,7 +51,7 @@ else
 
     private List<Topic> Topics = new List<Topic>
         {
-        new Topic { Id = 0, Name = "Hadee", IsSubsetVisible = false, SubItems = new List<string> { "Subitem Subitem Subitem Subitem Subitem Subitem Subitem", "Subitem" }},
+        new Topic { Id = 0, Name = "Hadee", IsSubsetVisible = false, SubItems = new List<string> { "Subitem", "Subitem" }},
         new Topic { Id = 1, Name = "Read", IsSubsetVisible = false, SubItems = new List<string> { "Subitem", "Subitem" }},
         new Topic { Id = 2, Name = "Deed", IsSubsetVisible = false, SubItems = new List<string> { "Subitem", "Subitem" }},
         new Topic { Id = 3, Name = "Section", IsSubsetVisible = false, SubItems = new List<string> { "Subitem", "Subitem" }},
