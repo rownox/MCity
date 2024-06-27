@@ -1,12 +1,9 @@
 ﻿@page "/learn"
 @inject ILearnPageService LearnPageService
-
-@rendermode InteractiveAuto
-
-
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
 
 <div class="learn-ctnr">
-    
     <div class="side-nav">
         @if (learnPages == null) {
             <p>Loading...</p>
@@ -14,27 +11,92 @@
             <p>No Pages Found.</p>
         } else {
             <ul>
-                @foreach (var learnPage in learnPages) {
+                @foreach (var topic in Topics) {
                     <div class="topic">
-                        <div class="title">@learnPage.Title</div>
-                        <div class="subset">
-                            <div class="sub-item">subItem</div>
+                        <div class="title" @onclick="@(() => ToggleSubset(topic.Id))">@topic.Title</div>
+                        <div class="subset" style="@GetSubsetStyle(topic.IsSubsetVisible)">
+                            @if (topic.SubItems != null) {
+                                @foreach (var subitem in topic.SubItems) {
+                                    <div class="sub-item" @onclick="@(() => selectPage(subitem.Id))">@subitem.Title</div>
+                                }
+                            }
                         </div>
                     </div>
                 }
             </ul>
         }
-        
     </div>
     <div class="content">
-        <div class="title">Title</div>
-        <div class="subtitle">Subtitle</div>
+        @if (selectedPage == null) {
+            <p>Home</p>
+        } else {
+            <div class="title">@selectedPage.Title</div>
+            <div class="subtitle">@selectedPage.Content</div>
+        }
+        
     </div>
 </div>
 
 @code {
-    List<LearnPage>? learnPages = null;
+    private LearnPage? selectedPage = null;
 
+    private List<LearnPage>? learnPages = null;
+    private List<Topic> Topics = new List<Topic>();
 
-    protected override async Task OnInitializedAsync() => learnPages = await LearnPageService.GetAllPages();
+    private class Topic {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public bool IsSubsetVisible { get; set; }
+        public List<Topic>? SubItems { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync() {
+        learnPages = await LearnPageService.GetAllPages();
+
+        foreach (var learnPage in learnPages) {
+            List<Topic> subTopics = new List<Topic>();
+
+            if (!string.IsNullOrEmpty(learnPage.SubTopics)) {
+                var subTopicIds = learnPage.SubTopics.Split(", ").Select(int.Parse).ToList();
+
+                foreach (var subPageId in subTopicIds) {
+                    var subLearnPage = learnPages.FirstOrDefault(lp => lp.Id == subPageId);
+                    if (subLearnPage != null) {
+                        subTopics.Add(new Topic { Id = subLearnPage.Id, Title = subLearnPage.Title, IsSubsetVisible = false, SubItems = null });
+                    }
+                }
+            }
+
+            foreach (var globalPage in learnPages) {
+                if (string.IsNullOrEmpty(globalPage.SubTopics)) {
+                    continue;
+                }
+                if (globalPage.SubTopics.Contains(learnPage.Id.ToString())) {
+                    return;
+                }
+            }
+            Topics.Add(new Topic { Id = learnPage.Id, Title = learnPage.Title, IsSubsetVisible = false, SubItems = subTopics.Count > 0 ? subTopics : null });
+        }
+    }
+
+    private void ToggleSubset(int id) {
+        var topic = Topics.FirstOrDefault(t => t.Id == id);
+        if (topic != null) {
+            topic.IsSubsetVisible = !topic.IsSubsetVisible;
+            StateHasChanged();
+        }
+    }
+
+    private void selectPage(int id) {
+        foreach (var learnPage in learnPages) {
+            if (id == learnPage.Id) {
+                selectedPage = learnPage;
+            }
+        }
+
+    }
+
+    private string GetSubsetStyle(bool isVisible) {
+        return isVisible ? "display: flex;" : "display: none;";
+    }
 }
