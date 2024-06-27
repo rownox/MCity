@@ -117,6 +117,17 @@ body {
             .main-ctnr .learn-ctnr .content .subtitle {
             }
 
+
+.nav-link {
+    text-decoration: none;
+    font-size: 15px;
+    color: var(--nav-text);
+}
+
+.nav-link.active {
+    color: var(--text1)
+}
+
 @media (min-width: 768px) {
     html {
         font-size: 16px;

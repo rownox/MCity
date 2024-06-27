@@ -1,0 +1,40 @@
+﻿@page "/learn"
+@inject ILearnPageService LearnPageService
+
+@rendermode InteractiveAuto
+
+
+
+<div class="learn-ctnr">
+    
+    <div class="side-nav">
+        @if (learnPages == null) {
+            <p>Loading...</p>
+        } else if (learnPages.Count == 0) {
+            <p>No Pages Found.</p>
+        } else {
+            <ul>
+                @foreach (var learnPage in learnPages) {
+                    <div class="topic">
+                        <div class="title">@learnPage.Title</div>
+                        <div class="subset">
+                            <div class="sub-item">subItem</div>
+                        </div>
+                    </div>
+                }
+            </ul>
+        }
+        
+    </div>
+    <div class="content">
+        <div class="title">Title</div>
+        <div class="subtitle">Subtitle</div>
+    </div>
+</div>
+
+@code {
+    List<LearnPage>? learnPages = null;
+
+
+    protected override async Task OnInitializedAsync() => learnPages = await LearnPageService.GetAllPages();
+}

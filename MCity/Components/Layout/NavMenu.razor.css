@@ -11,6 +11,9 @@
         width: 1500px;
         display: flex;
         height: 100%;
+        display: flex;
+        align-items: center;
+
     }
         .navbar .container .left {
             height: 100%;
@@ -28,11 +31,6 @@
             list-style: none;
             gap: 10px;
         }
-            .navbar .container .links .link {
-                text-decoration: none;
-                font-size: 20px;
-                color: var(--nav-text);
-            }
 
 
 
