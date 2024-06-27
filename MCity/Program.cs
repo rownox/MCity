@@ -30,6 +30,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<ILearnPageService, LearnPageService>();
+builder.Services.AddScoped<ILearnTopicService, LearnTopicService>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

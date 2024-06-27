@@ -13,8 +13,6 @@ namespace MCity.Services {
 
         public async Task<List<LearnPage>> GetAllPages() {
 
-            await Task.Delay(1000);
-
             var learnpages = await _context.LearnPages.ToListAsync();
             return learnpages;
         }

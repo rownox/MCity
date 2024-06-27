@@ -9,5 +9,6 @@ namespace MCity.Data {
         }
 
         public DbSet<LearnPage> LearnPages { get; set; }
+        public DbSet<LearnTopic> LearnTopics { get; set; }
     }
 }
