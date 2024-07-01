@@ -1,26 +1,28 @@
 ﻿@page "/learn"
 @inject ILearnPageService LearnPageService
+@inject ILearnTopicService LearnTopicService
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
 
 <div class="learn-ctnr">
     <div class="side-nav">
-        @if (learnPages == null) {
+        @if (learnTopics == null) {
             <p>Loading...</p>
-        } else if (learnPages.Count == 0) {
+        } else if (learnTopics.Count == 0) {
             <p>No Pages Found.</p>
         } else {
             <ul>
                 @foreach (var topic in learnTopics) {
-                    <div class="topic">
-@*                         <div class="title" @onclick="@(() => ToggleSubset(topic.Id))">@topic.Title</div>
-                        <div class="subset" style="@GetSubsetStyle(topic.IsSubsetVisible)">
-                            @if (topic.SubItems != null) {
-                                @foreach (var subitem in topic.SubItems) {
-                                    <div class="sub-item" @onclick="@(() => selectPage(subitem.Id))">@subitem.Title</div>
+                    <div class="topic" @key="topic.Id">
+                        <div class="title" @onclick="@(() => ToggleSubset(topic.Id))">@topic.Title</div>
+                        <div class="subset" style="@GetSubsetStyle(topicVisible[topic.Id])">
+                            <div class="sub-item" @onclick="@(() => SelectPage(topic.HomePage))">@pageLookup[topic.HomePage]?.Title</div>
+                            @if (topicPages.ContainsKey(topic.Id)) {
+                                @foreach (var subitem in topicPages[topic.Id]) {
+                                    <div class="sub-item" @key="subitem.Id" @onclick="@(() => SelectPage(subitem.Id))">@subitem.Title</div>
                                 }
                             }
-                        </div> *@
+                        </div>
                     </div>
                 }
             </ul>
@@ -41,50 +43,33 @@
 
     private List<LearnPage>? learnPages = null;
     private List<LearnTopic>? learnTopics = null;
+    private Dictionary<int, bool> topicVisible = new Dictionary<int, bool>();
+    private Dictionary<int, List<LearnPage>> topicPages = new Dictionary<int, List<LearnPage>>();
+    private Dictionary<int, LearnPage> pageLookup = new Dictionary<int, LearnPage>();
 
     protected override async Task OnInitializedAsync() {
         learnPages = await LearnPageService.GetAllPages();
+        learnTopics = await LearnTopicService.GetAllTopics();
 
-        // foreach (var learnPage in learnPages) {
-        //     List<LearnTopic> subTopics = new List<Topic>();
+        foreach (var page in learnPages) {
+            pageLookup[page.Id] = page;
+        }
 
-        //     if (!string.IsNullOrEmpty(learnPage.SubTopics)) {
-        //         var subTopicIds = learnPage.SubTopics.Split(", ").Select(int.Parse).ToList();
-
-        //         foreach (var subPageId in subTopicIds) {
-        //             var subLearnPage = learnPages.FirstOrDefault(lp => lp.Id == subPageId);
-        //             if (subLearnPage != null) {
-        //                 subTopics.Add(new Topic { Id = subLearnPage.Id, Title = subLearnPage.Title, IsSubsetVisible = false, SubItems = null });
-        //             }
-        //         }
-        //     }
-
-        //     foreach (var globalPage in learnPages) {
-        //         if (string.IsNullOrEmpty(globalPage.SubTopics)) {
-        //             continue;
-        //         }
-        //         if (globalPage.SubTopics.Contains(learnPage.Id.ToString())) {
-        //             return;
-        //         }
-        //     }
-        //     Topics.Add(new Topic { Id = learnPage.Id, Title = learnPage.Title, IsSubsetVisible = false, SubItems = subTopics.Count > 0 ? subTopics : null });
-        // }
-    }
-
-    // private void ToggleSubset(int id) {
-    //     var topic = Topics.FirstOrDefault(t => t.Id == id);
-    //     if (topic != null) {
-    //         topic.IsSubsetVisible = !topic.IsSubsetVisible;
-    //         StateHasChanged();
-    //     }
-    // }
-
-    private void selectPage(int id) {
-        foreach (var learnPage in learnPages) {
-            if (id == learnPage.Id) {
-                selectedPage = learnPage;
+        foreach (var topic in learnTopics) {
+            topicVisible[topic.Id] = false;
+            if (topic.Pages != null) {
+                var subTopicIds = topic.Pages.Split(", ").Select(int.Parse).ToList();
+                topicPages[topic.Id] = subTopicIds.Select(id => pageLookup[id]).ToList();
             }
         }
+    }
+
+    private void ToggleSubset(int id) {
+        topicVisible[id] = !topicVisible[id];
+    }
+
+    private void SelectPage(int id) {
+        selectedPage = pageLookup.GetValueOrDefault(id);
     }
 
     private string GetSubsetStyle(bool isVisible) {
