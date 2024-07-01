@@ -1,6 +1,8 @@
 ﻿@page "/learn"
+@page "/learn/{topicId:int?}/{pageId:int?}"
 @inject ILearnPageService LearnPageService
 @inject ILearnTopicService LearnTopicService
+@inject NavigationManager NavigationManager
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
 
@@ -14,12 +16,21 @@
             <ul>
                 @foreach (var topic in learnTopics) {
                     <div class="topic" @key="topic.Id">
-                        <div class="title" @onclick="@(() => ToggleSubset(topic.Id))">@topic.Title</div>
+                        <div class="title" @onclick="@(() => ToggleSubset(topic.Id))">
+                            <p>@topic.Title</p>
+                            <p id="drop-icon">@GetDropIcon(topicVisible[topic.Id])</p>
+                        </div>
                         <div class="subset" style="@GetSubsetStyle(topicVisible[topic.Id])">
-                            <div class="sub-item" @onclick="@(() => SelectPage(topic.HomePage))">@pageLookup[topic.HomePage]?.Title</div>
+                            <a class="sub-item @(IsActivePage(topic.HomePage) ? "active" : "")"
+                               href="/learn/@topic.Id/@topic.HomePage">
+                                @pageLookup[topic.HomePage]?.Title
+                            </a>
                             @if (topicPages.ContainsKey(topic.Id)) {
                                 @foreach (var subitem in topicPages[topic.Id]) {
-                                    <div class="sub-item" @key="subitem.Id" @onclick="@(() => SelectPage(subitem.Id))">@subitem.Title</div>
+                                    <a class="sub-item @(IsActivePage(subitem.Id) ? "active" : "")"
+                                       @key="subitem.Id" href="/learn/@topic.Id/@subitem.Id">
+                                        @subitem.Title
+                                    </a>
                                 }
                             }
                         </div>
@@ -32,20 +43,40 @@
         @if (selectedPage == null) {
             <p>Home</p>
         } else {
-            <div class="title">@selectedPage.Title</div>
-            <div class="subtitle">@selectedPage.Content</div>
+            <p class="title">@selectedPage.Title</p>
+
+            <div class="section filler break">
+                <p class="subtitle">@selectedPage.Content</p>
+            </div>
+
+            <div class="section filler break">
+                <p class="title">Sources</p>
+                <p class="subtitle">@selectedPage.Source</p>
+
+            </div>
+            <div class="section">
+                <p>Last Edited By: @selectedPage.LastEditedBy - @selectedPage.LastEdited</p>
+            </div>
         }
     </div>
 </div>
 
 @code {
     private LearnPage? selectedPage = null;
+    private int? activePageId = null;
+    private int? activeTopicId = null;
 
     private List<LearnPage>? learnPages = null;
     private List<LearnTopic>? learnTopics = null;
     private Dictionary<int, bool> topicVisible = new Dictionary<int, bool>();
     private Dictionary<int, List<LearnPage>> topicPages = new Dictionary<int, List<LearnPage>>();
     private Dictionary<int, LearnPage> pageLookup = new Dictionary<int, LearnPage>();
+
+    [Parameter]
+    public int? topicId { get; set; }
+
+    [Parameter]
+    public int? pageId { get; set; }
 
     protected override async Task OnInitializedAsync() {
         learnPages = await LearnPageService.GetAllPages();
@@ -64,15 +95,35 @@
         }
     }
 
+    protected override async Task OnParametersSetAsync() {
+        if (topicId.HasValue) {
+            ToggleSubset(topicId.Value);
+            activeTopicId = topicId.Value;
+        }
+
+        if (pageId.HasValue) {
+            SelectPage(pageId.Value);
+        }
+    }
+
     private void ToggleSubset(int id) {
         topicVisible[id] = !topicVisible[id];
     }
 
     private void SelectPage(int id) {
         selectedPage = pageLookup.GetValueOrDefault(id);
+        activePageId = id;
+    }
+
+    private bool IsActivePage(int id) {
+        return activePageId == id;
     }
 
     private string GetSubsetStyle(bool isVisible) {
         return isVisible ? "display: flex;" : "display: none;";
+    }
+
+    private string GetDropIcon(bool isVisible) {
+        return isVisible ? "⯆" : "⯈";
     }
 }

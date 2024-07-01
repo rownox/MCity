@@ -99,11 +99,11 @@ namespace MCity.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DateCreated")
+                        .HasColumnType("date");
 
-                    b.Property<DateTime>("LastEdited")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("LastEdited")
+                        .HasColumnType("date");
 
                     b.Property<string>("LastEditedBy")
                         .IsRequired()
@@ -111,9 +111,6 @@ namespace MCity.Migrations
 
                     b.Property<string>("Source")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SubTopics")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
@@ -132,9 +129,6 @@ namespace MCity.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Expanded")
-                        .HasColumnType("bit");
 
                     b.Property<int>("HomePage")
                         .HasColumnType("int");

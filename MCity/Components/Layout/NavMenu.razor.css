@@ -2,8 +2,9 @@
     background-color: var(--black);
     display: flex;
     justify-content: center;
-    padding: 10px;
+    padding: 10px 0;
     width: 100%;
+    border-bottom: 1px solid var(--gray4);
 }
     .navbar .container {
         width: 80%;
@@ -13,11 +14,21 @@
         height: 100%;
         display: flex;
         align-items: center;
-
     }
         .navbar .container .left {
             height: 100%;
+            margin-right: 30px;
         }
+        .navbar .container .left .icon {
+
+        }
+
+            .navbar .container .left .icon img {
+                width: 30px;
+                height: 30px;
+                filter: invert(50%);
+            }
+
         .navbar .container .mid {
             height: 100%;
             display: flex;
@@ -29,7 +40,7 @@
         .navbar .container .links {
             display: flex;
             list-style: none;
-            gap: 10px;
+            gap: 15px;
         }
 
 

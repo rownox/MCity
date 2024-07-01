@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MCity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240627163756_Initial")]
+    [Migration("20240701161946_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -102,11 +102,11 @@ namespace MCity.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DateCreated")
+                        .HasColumnType("date");
 
-                    b.Property<DateTime>("LastEdited")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("LastEdited")
+                        .HasColumnType("date");
 
                     b.Property<string>("LastEditedBy")
                         .IsRequired()
@@ -123,6 +123,30 @@ namespace MCity.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LearnPages");
+                });
+
+            modelBuilder.Entity("MCity.Models.LearnTopic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("HomePage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Pages")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LearnTopics");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
