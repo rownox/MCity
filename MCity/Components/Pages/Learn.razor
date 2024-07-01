@@ -8,11 +8,7 @@
 
 <div class="learn-ctnr">
     <div class="side-nav">
-        @if (learnTopics == null) {
-            <p>Loading...</p>
-        } else if (learnTopics.Count == 0) {
-            <p>No Pages Found.</p>
-        } else {
+        @if (learnTopics != null) {
             <ul>
                 @foreach (var topic in learnTopics) {
                     <div class="topic" @key="topic.Id">

@@ -13,5 +13,6 @@ namespace MCity.Models {
         public DateOnly DateCreated { get; set; }
         public DateOnly LastEdited { get; set; }
         public string LastEditedBy { get; set; }
+        public string Contributors { get; set; }
     }
 }

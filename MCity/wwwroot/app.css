@@ -1,15 +1,14 @@
 ﻿:root {
     --black: #000000;
     --gray1: #141516;
-    --gray2: #1a1c21;
-    --gray3: #25272b;
-    --gray4: #3a3d46;
-    --gray5: #727582;
+    --gray2: #212328;
+    --gray3: #33363b;
+    --gray4: #42454d;
+    --gray5: #80828d;
     --text1: #ffffff;
     --text2: #a5a8b6;
     --text3: #828282;
     --text4: #000000;
-    --active: #005704;
 }
 
 * {
@@ -48,8 +47,11 @@ body {
     .learn-ctnr .side-nav {
         width: 250px;
     }
+
         .learn-ctnr .side-nav .active {
-            background-color: var(--active) !important;
+            background-color: var(--gray3) !important;
+            color: var(--text1) !important;
+            text-decoration: underline !important;
         }
 
         .learn-ctnr .side-nav .topic {
