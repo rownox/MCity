@@ -2,14 +2,11 @@
 
 #nullable disable
 
-namespace MCity.Migrations
-{
+namespace MCity.Migrations {
     /// <inheritdoc />
-    public partial class contributors : Migration
-    {
+    public partial class contributors : Migration {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
+        protected override void Up(MigrationBuilder migrationBuilder) {
             migrationBuilder.AlterColumn<string>(
                 name: "Pages",
                 table: "LearnTopics",
@@ -27,8 +24,7 @@ namespace MCity.Migrations
         }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
+        protected override void Down(MigrationBuilder migrationBuilder) {
             migrationBuilder.DropColumn(
                 name: "Contributors",
                 table: "LearnPages");
