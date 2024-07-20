@@ -35,6 +35,7 @@
                         </div>
                     </div>
                 }
+                <button @onclick="CreatePage" class="btn">Create Page</button>
             </ul>
         }
     </div>
@@ -109,4 +110,8 @@
 
     private static string ToUrlFriendly(string? title) =>
         Uri.EscapeDataString(title?.Replace(" ", "-").ToLower() ?? string.Empty);
+
+    void CreatePage() {
+        NavigationManager.NavigateTo("/edit-learn-page");
+    }
 }

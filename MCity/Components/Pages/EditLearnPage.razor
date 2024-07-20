@@ -1,5 +1,21 @@
-﻿<h3>EditLearnPage</h3>
+﻿@page "/edit-learn-page"
+@page "/edit-learn-page/{id:int}"
+
+<h3>Create Learn Page</h3>
+
+<EditForm Model="learnPage" OnSubmit="HandleSubmit">
+    <label>Title</label>
+    <InputText @bind-Value="learnPage.Title">@learnPage.Title</InputText>
+    <button type="submit" class="btn">Submit</button>
+</EditForm>
 
 @code {
-    LearnPage learnpage = new LearnPage { }
+    [Parameter]
+    public int? Id { get; set; }
+
+    LearnPage learnPage = new LearnPage { Title = string.Empty };
+
+    async Task HandleSubmit() {
+        
+    }
 }
