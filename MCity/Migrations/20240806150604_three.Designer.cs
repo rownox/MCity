@@ -4,6 +4,7 @@ using MCity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MCity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240806150604_three")]
+    partial class three
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,7 +137,7 @@ namespace MCity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("HomePageId")
+                    b.Property<int>("HomePageId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -143,8 +146,7 @@ namespace MCity.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("HomePageId")
-                        .IsUnique()
-                        .HasFilter("[HomePageId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("LearnTopics");
                 });
@@ -287,7 +289,7 @@ namespace MCity.Migrations
                     b.HasOne("MCity.Models.LearnTopic", "LearnTopic")
                         .WithMany("Pages")
                         .HasForeignKey("LearnTopicId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("LearnTopic");
                 });
@@ -297,7 +299,8 @@ namespace MCity.Migrations
                     b.HasOne("MCity.Models.LearnPage", "HomePage")
                         .WithOne()
                         .HasForeignKey("MCity.Models.LearnTopic", "HomePageId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("HomePage");
                 });

@@ -1,0 +1,113 @@
+﻿@page "/old-learn"
+@page "/old-learn/{TopicTitle?}/{PageTitle?}"
+@inject ILearnPageService LearnPageService
+@inject ILearnTopicService LearnTopicService
+@inject NavigationManager NavigationManager
+@attribute [StreamRendering(true)]
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<PageTitle>Learn</PageTitle>
+
+<div class="learn-ctnr">
+   <div class="side-nav">
+      @if (learnTopics != null) {
+         <ul>
+            @foreach (var topic in learnTopics) {
+               <div class="topic" @key="topic.Id">
+                  <div class="title" @onclick="@(() => ToggleSubset(topic.Id))">
+                     <p>@topic.Title</p>
+                     <p id="drop-icon">@(topicVisible.Contains(topic.Id) ? "⯆" : "⯈")</p>
+                  </div>
+                  <div class="subset" style="display: @(topicVisible.Contains(topic.Id) ? "flex" : "none");">
+                     <a class="sub-item @(IsActivePage(topic.HomePage.Id) ? "active" : "")"
+                        href="@GetPageUrl(topic.Title, pageLookup[topic.HomePage.Id]?.Title)">
+                        @pageLookup[topic.HomePage.Id]?.Title
+                     </a>
+
+                     @if (topicPages.TryGetValue(topic.Id, out var subPages)) {
+                        @foreach (var subitem in subPages) {
+                           <a class="sub-item @(IsActivePage(subitem.Id) ? "active" : "")"
+                              @key="subitem.Id" href="@GetPageUrl(topic.Title, subitem.Title)">
+                              @subitem.Title
+                           </a>
+                        }
+                     }
+                  </div>
+               </div>
+            }
+            <CreatePageButton />
+         </ul>
+      }
+   </div>
+   <div class="content">
+      @if (selectedPage == null) {
+         <LearnHome />
+      } else {
+         <p class="title">@selectedPage.Title</p>
+         <div class="section filler break">
+            <p class="subtitle">@selectedPage.Content</p>
+         </div>
+         <div class="section break">
+            <p class="title">Sources</p>
+            <p class="subtitle">@selectedPage.Source</p>
+         </div>
+         <div class="section">
+            <p>Last Edited By: @selectedPage.LastEditedBy - @selectedPage.LastEdited</p>
+         </div>
+      }
+   </div>
+</div>
+
+@code {
+   private LearnPage? selectedPage;
+   private List<LearnPage>? learnPages;
+   private List<LearnTopic>? learnTopics;
+   private HashSet<int> topicVisible = new();
+   private Dictionary<int, List<LearnPage>> topicPages = new();
+   private Dictionary<int, LearnPage> pageLookup = new();
+
+   [Parameter] public string? TopicTitle { get; set; }
+   [Parameter] public string? PageTitle { get; set; }
+
+   protected override async Task OnInitializedAsync() {
+      learnPages = await LearnPageService.GetAllPages();
+      learnTopics = await LearnTopicService.GetAllTopics();
+
+      pageLookup = learnPages.ToDictionary(p => p.Id);
+
+      foreach (var topic in learnTopics) {
+         if (topic.Pages != null) {
+            var subTopics = topic.Pages;
+            topicPages[topic.Id] = subTopics.Select(page => pageLookup[page.Id]).ToList();
+         }
+      }
+   }
+
+   protected override void OnParametersSet() {
+      if (!string.IsNullOrEmpty(TopicTitle)) {
+         var topic = learnTopics?.SingleOrDefault(t => ToUrlFriendly(t.Title) == TopicTitle);
+         if (topic != null) {
+            ToggleSubset(topic.Id);
+         }
+      }
+
+      if (!string.IsNullOrEmpty(PageTitle)) {
+         var page = learnPages?.SingleOrDefault(p => ToUrlFriendly(p.Title) == PageTitle);
+         if (page != null) {
+            SelectPage(page.Id);
+         }
+      }
+   }
+
+   private void ToggleSubset(int id) => topicVisible.Toggle(id);
+   private void SelectPage(int id) => selectedPage = pageLookup.GetValueOrDefault(id);
+   private bool IsActivePage(int id) => selectedPage?.Id == id;
+
+   private string GetPageUrl(string topicTitle, string? pageTitle) =>
+       $"/learn/{ToUrlFriendly(topicTitle)}/{ToUrlFriendly(pageTitle)}";
+
+   private static string ToUrlFriendly(string? title) =>
+       Uri.EscapeDataString(title?.Replace(" ", "-").ToLower() ?? string.Empty);
+
+
+}

@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Components\Pages\EditLearnPage.razor" />
+    <Content Remove="Components\Pages\Learn\Home.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,15 +35,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Components\Pages\EditLearnPage.razor" />
+    <UpToDateCheckInput Remove="Components\Pages\Learn\Home.razor" />
   </ItemGroup>
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="Components\Pages\EditLearnPage.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\Learn\Home.razor" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Components\Pages\EditLearnPage.razor" />
+    <None Include="Components\Shared\LearnHome.razor" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,121 @@
+﻿@page "/learn"
+@page "/learn/{TopicTitle?}/{PageTitle?}"
+@inject ILearnPageService LearnPageService
+@inject ILearnTopicService LearnTopicService
+@inject NavigationManager NavigationManager
+@attribute [StreamRendering(true)]
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<PageTitle>Learn</PageTitle>
+
+@if (ErrorMessage != null) {
+   <div class="alert alert-danger">@ErrorMessage</div>
+}
+
+<div class="learn-ctnr">
+   <div class="side-nav">
+      @if (LearnTopics != null) {
+         <ul>
+            @foreach (var container in LearnTopics) {
+               var topic = container.Key;
+               var isVisible = container.Value;
+               <div class="topic" @key="topic.Id">
+                  <div class="title" @onclick="@(() => ToggleSubset(topic))">
+                     <p>@topic.Title</p>
+                     <p id="drop-icon">@(isVisible ? "⯆" : "⯈")</p>
+                  </div>
+                  <div class="subset" style="display: @(isVisible ? "flex" : "none");">
+                     @if (topic.HomePage != null) {
+                        <a class="sub-item @(IsActivePage(topic.HomePage) ? "active" : "")"
+                           href="@GetPageUrl(topic.Title, topic.HomePage.Title)">
+                           @topic.HomePage.Title
+                        </a>
+                     }
+                     @foreach (var subPage in topic.Pages) {
+                        <a class="sub-item @(IsActivePage(subPage) ? "active" : "")"
+                           @key="subPage.Id" href="@GetPageUrl(topic.Title, subPage.Title)">
+                           @subPage.Title
+                        </a>
+                     }
+                  </div>
+               </div>
+            }
+         </ul>
+      } else {
+         <p>Loading...</p>
+      }
+
+      <CreateTopicButton />
+      <CreatePageButton />
+   </div>
+   <div class="content">
+      @if (SelectedPage == null) {
+         <LearnHome />
+      } else {
+         <p class="title">@SelectedPage.Title</p>
+         <div class="section filler break">
+            <p class="subtitle">@SelectedPage.Content</p>
+         </div>
+         <div class="section break">
+            <p class="title">Sources</p>
+            <p class="subtitle">@SelectedPage.Source</p>
+         </div>
+         <div class="section">
+            <p>Last Edited By: @SelectedPage.LastEditedBy - @SelectedPage.LastEdited</p>
+         </div>
+      }
+   </div>
+</div>
+
+@code {
+   private LearnPage? SelectedPage = null;
+   private SortedDictionary<LearnTopic, bool>? LearnTopics { get; set; }
+   [Parameter] public string? TopicTitle { get; set; }
+   [Parameter] public string? PageTitle { get; set; }
+   private string? ErrorMessage { get; set; }
+
+   protected override async Task OnInitializedAsync() {
+      try {
+         var learnTopics = await LearnTopicService.GetAllTopics();
+         LearnTopics = new SortedDictionary<LearnTopic, bool>(
+             learnTopics.ToDictionary(t => t, _ => false)
+         );
+      } catch (Exception ex) {
+         ErrorMessage = $"An error occurred while loading topics: {ex.Message}";
+         Console.WriteLine($"Error details: {ex}");
+      }
+   }
+
+   protected override void OnParametersSet() {
+      try {
+         if (LearnTopics != null && TopicTitle != null && PageTitle != null) {
+            var topic = LearnTopics.Keys.FirstOrDefault(t => ToUrlFriendly(t.Title) == TopicTitle);
+            if (topic != null) {
+               SelectedPage = topic.Pages.FirstOrDefault(p => ToUrlFriendly(p.Title) == PageTitle) ?? topic.HomePage;
+               if (SelectedPage != null) {
+                  LearnTopics[topic] = true;
+               }
+            }
+         }
+      } catch (Exception ex) {
+         ErrorMessage = $"An error occurred while setting parameters: {ex.Message}";
+         Console.WriteLine($"Error details: {ex}");
+      }
+   }
+
+   private void ToggleSubset(LearnTopic topic) {
+      if (LearnTopics != null && LearnTopics.ContainsKey(topic)) {
+         LearnTopics[topic] = !LearnTopics[topic];
+      }
+   }
+
+   private void SelectPage(LearnPage page) => SelectedPage = page;
+
+   private bool IsActivePage(LearnPage page) => SelectedPage == page;
+
+   private string GetPageUrl(string topicTitle, string? pageTitle) =>
+       $"/learn/{ToUrlFriendly(topicTitle)}/{ToUrlFriendly(pageTitle)}";
+
+   private static string ToUrlFriendly(string? title) =>
+       Uri.EscapeDataString(title?.Replace(" ", "-").ToLower() ?? string.Empty);
+}

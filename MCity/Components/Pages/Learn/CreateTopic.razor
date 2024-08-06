@@ -1,0 +1,26 @@
+﻿@page "/learn/create-topic"
+@page "/learn/create-topic/{id:int}"
+@inject ILearnPageService LearnPageService
+@inject ILearnTopicService LearnTopicService
+
+<EditForm Model="learnTopic" OnSubmit="HandleSubmit" FormName="createTopic">
+   <label>Topic Title</label>
+   <InputText @bind-Value="learnTopic.Title">@learnTopic.Title</InputText>
+
+   <label>Home Page Title</label>
+   <InputText @bind-Value="learnPage.Title">@learnPage.Title</InputText>
+
+   <button type="submit" class="btn">Submit</button>
+</EditForm>
+
+@code {
+   [Parameter]
+   public int? Id { get; set; }
+   [SupplyParameterFromForm]
+   LearnTopic learnTopic { get; set; } = new LearnTopic { Title = string.Empty };
+   LearnPage learnPage { get; set; } = new LearnPage();
+
+   async Task HandleSubmit() {
+      await LearnTopicService.AddTopic(learnTopic, learnPage);
+   }
+}

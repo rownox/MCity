@@ -1,0 +1,11 @@
+﻿@inject NavigationManager NavigationManager
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<button @onclick="CreateTopic" class="btn">Create Topic</button>
+
+@code {
+
+   void CreateTopic() {
+      NavigationManager.NavigateTo("/learn/create-topic");
+   }
+}

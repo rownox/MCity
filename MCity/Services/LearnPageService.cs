@@ -11,9 +11,17 @@ namespace MCity.Services {
             _context = context;
         }
 
-        public async Task<List<LearnPage>> GetAllPages() {
+      public async Task<LearnPage?> AddPage(LearnPage learnPage) {
+         _context.LearnPages.Add(learnPage);
+         await _context.SaveChangesAsync();
+         return learnPage;
+      }
 
-            var learnpages = await _context.LearnPages.ToListAsync();
+      public async Task<List<LearnPage>> GetAllPages() {
+            await Task.Delay(1000);
+            var learnpages = await _context.LearnPages
+            .Include(p => p.LearnTopic)
+            .ToListAsync();
             return learnpages;
         }
 
