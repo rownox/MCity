@@ -69,7 +69,7 @@
 
 @code {
    private LearnPage? SelectedPage = null;
-   private SortedDictionary<LearnTopic, bool>? LearnTopics { get; set; }
+   private SortedDictionary<LearnTopic, bool> LearnTopics { get; set; } = new SortedDictionary<LearnTopic, bool>();
    [Parameter] public string? TopicTitle { get; set; }
    [Parameter] public string? PageTitle { get; set; }
    private string? ErrorMessage { get; set; }
@@ -118,4 +118,5 @@
 
    private static string ToUrlFriendly(string? title) =>
        Uri.EscapeDataString(title?.Replace(" ", "-").ToLower() ?? string.Empty);
+
 }

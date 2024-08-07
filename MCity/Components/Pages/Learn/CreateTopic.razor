@@ -1,26 +1,41 @@
 ﻿@page "/learn/create-topic"
-@page "/learn/create-topic/{id:int}"
 @inject ILearnPageService LearnPageService
 @inject ILearnTopicService LearnTopicService
+@inject NavigationManager NavigationManager
+@inject ILogger<CreateTopic> Logger
 
-<EditForm Model="learnTopic" OnSubmit="HandleSubmit" FormName="createTopic">
+<EditForm Model="@formModel" OnValidSubmit="HandleSubmit" FormName="createTopic">
    <label>Topic Title</label>
-   <InputText @bind-Value="learnTopic.Title">@learnTopic.Title</InputText>
+   <InputText @bind-Value="formModel.TopicTitle"></InputText>
 
    <label>Home Page Title</label>
-   <InputText @bind-Value="learnPage.Title">@learnPage.Title</InputText>
+   <InputText @bind-Value="formModel.PageTitle"></InputText>
 
    <button type="submit" class="btn">Submit</button>
 </EditForm>
 
 @code {
-   [Parameter]
-   public int? Id { get; set; }
-   [SupplyParameterFromForm]
-   LearnTopic learnTopic { get; set; } = new LearnTopic { Title = string.Empty };
-   LearnPage learnPage { get; set; } = new LearnPage();
+   private class FormModel {
+      public string TopicTitle { get; set; } = string.Empty;
+      public string PageTitle { get; set; } = string.Empty; 
+   }
 
-   async Task HandleSubmit() {
-      await LearnTopicService.AddTopic(learnTopic, learnPage);
+   private FormModel formModel { get; set; } = new FormModel();
+
+   private async Task HandleSubmit() {
+      if (string.IsNullOrWhiteSpace(formModel.TopicTitle) || string.IsNullOrWhiteSpace(formModel.PageTitle)) {
+         Logger.LogWarning("Titles are empty. Form submission cancelled.");
+         return;
+      }
+
+      LearnTopic learnTopic = new LearnTopic { Title = formModel.TopicTitle };
+      LearnPage learnPage = new LearnPage { Title = formModel.PageTitle };
+   
+      try {
+         await LearnTopicService.AddTopic(learnTopic, learnPage);
+         NavigationManager.NavigateTo("/learn");
+      } catch (Exception ex) {
+         Logger.LogError($"Error in AddTopic: {ex.Message}");
+      }
    }
 }
