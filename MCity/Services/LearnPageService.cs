@@ -29,5 +29,11 @@ namespace MCity.Services {
             var learnpage = await _context.LearnPages.FindAsync(id);
             return learnpage;
         }
-    }
+
+      public async Task<LearnPage?> UpdatePage(LearnPage learnPage) {
+         _context.LearnPages.Update(learnPage);
+         await _context.SaveChangesAsync();
+         return learnPage;
+      }
+   }
 }

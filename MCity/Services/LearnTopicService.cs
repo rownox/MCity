@@ -13,42 +13,28 @@ namespace MCity.Services {
          _logger = logger;
       }
 
-      public async Task<LearnTopic?> AddTopic(LearnTopic learnTopic, LearnPage learnPage) {
-         _logger.LogInformation($"AddTopic called. LearnTopic.Title: {learnTopic.Title}, LearnPage.Title: {learnPage.Title}");
-
+      public async Task<LearnTopic?> AddTopic(LearnTopic learnTopic) {
          using var transaction = await _context.Database.BeginTransactionAsync();
-         try {
-            _context.LearnTopics.Add(learnTopic);
-            await _context.SaveChangesAsync();
-            _logger.LogInformation($"LearnTopic added. Id: {learnTopic.Id}");
 
-            learnPage.LearnTopicId = learnTopic.Id;
-            learnPage.LearnTopic = learnTopic;
-            _context.LearnPages.Add(learnPage);
-            await _context.SaveChangesAsync();
-            _logger.LogInformation($"LearnPage added. Id: {learnPage.Id}");
+         LearnPage learnPage = new LearnPage() {
+            LearnTopic = learnTopic,
+            LearnTopicId = learnTopic.Id,
+            Title = "Introduction"
+         };
 
-            learnTopic.HomePageId = learnPage.Id;
-            learnTopic.HomePage = learnPage;
-            await _context.SaveChangesAsync();
-            _logger.LogInformation($"LearnTopic updated with HomePage");
+         _context.LearnTopics.Add(learnTopic);
+         _context.LearnPages.Add(learnPage);
+         await _context.SaveChangesAsync();
 
-            await transaction.CommitAsync();
-            _logger.LogInformation("Transaction committed");
+         learnTopic.Pages.Add(learnPage);
+         await _context.SaveChangesAsync();
+         await transaction.CommitAsync();
 
-            return learnTopic;
-         } catch (Exception ex) {
-            _logger.LogError($"Error in AddTopic: {ex.Message}");
-            await transaction.RollbackAsync();
-            throw;
-         }
+         return learnTopic;
       }
-
-
 
       public async Task<List<LearnTopic>> GetAllTopics() {
          var learntopics = await _context.LearnTopics
-         .Include(t => t.HomePage)
          .Include(t => t.Pages)
          .ToListAsync();
          return learntopics;

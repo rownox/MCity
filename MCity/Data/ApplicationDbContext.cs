@@ -17,13 +17,12 @@ namespace MCity.Data {
          modelBuilder.Entity<LearnPage>()
              .HasOne(lp => lp.LearnTopic)
              .WithMany(lt => lt.Pages)
-             .HasForeignKey(lp => lp.LearnTopicId)
-             .IsRequired(false);
+             .HasForeignKey(lp => lp.LearnTopicId);
 
          modelBuilder.Entity<LearnTopic>()
-             .HasOne(lt => lt.HomePage)
-             .WithOne()
-             .HasForeignKey<LearnTopic>(lt => lt.HomePageId)
+             .HasMany(lt => lt.Pages)
+             .WithOne(lp => lp.LearnTopic)
+             .HasForeignKey(lp => lp.LearnTopicId)
              .IsRequired(false);
       }
    }

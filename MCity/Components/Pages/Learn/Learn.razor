@@ -25,12 +25,6 @@
                      <p id="drop-icon">@(isVisible ? "⯆" : "⯈")</p>
                   </div>
                   <div class="subset" style="display: @(isVisible ? "flex" : "none");">
-                     @if (topic.HomePage != null) {
-                        <a class="sub-item @(IsActivePage(topic.HomePage) ? "active" : "")"
-                           href="@GetPageUrl(topic.Title, topic.HomePage.Title)">
-                           @topic.HomePage.Title
-                        </a>
-                     }
                      @foreach (var subPage in topic.Pages) {
                         <a class="sub-item @(IsActivePage(subPage) ? "active" : "")"
                            @key="subPage.Id" href="@GetPageUrl(topic.Title, subPage.Title)">
@@ -46,30 +40,34 @@
       }
 
       <CreateTopicButton />
-      <CreatePageButton />
    </div>
    <div class="content">
       @if (SelectedPage == null) {
          <LearnHome />
       } else {
-         <p class="title">@SelectedPage.Title</p>
-         <div class="section filler break">
-            <p class="subtitle">@SelectedPage.Content</p>
-         </div>
-         <div class="section break">
-            <p class="title">Sources</p>
-            <p class="subtitle">@SelectedPage.Source</p>
-         </div>
-         <div class="section">
-            <p>Last Edited By: @SelectedPage.LastEditedBy - @SelectedPage.LastEdited</p>
-         </div>
+         <p class="title">@SelectedPage.LearnTopic.Title - @SelectedPage.Title</p>
+         @if (SelectedPage.Content == null) {
+            <ContentNotFound/>
+         } else {
+            <div class="section filler break">
+               <p class="subtitle">@SelectedPage.Content</p>
+            </div>
+            <div class="section break">
+               <p class="title">Sources</p>
+               <p class="subtitle">@SelectedPage.Source</p>
+            </div>
+            <div class="section">
+               <p>Last Edited By: @SelectedPage.LastEditedBy - @SelectedPage.LastEdited</p>
+            </div>
+            <EditPageButton Id="SelectedPage.Id" />
+         }
       }
    </div>
 </div>
 
 @code {
    private LearnPage? SelectedPage = null;
-   private SortedDictionary<LearnTopic, bool> LearnTopics { get; set; } = new SortedDictionary<LearnTopic, bool>();
+   private Dictionary<LearnTopic, bool> LearnTopics { get; set; } = new Dictionary<LearnTopic, bool>();
    [Parameter] public string? TopicTitle { get; set; }
    [Parameter] public string? PageTitle { get; set; }
    private string? ErrorMessage { get; set; }
@@ -77,9 +75,9 @@
    protected override async Task OnInitializedAsync() {
       try {
          var learnTopics = await LearnTopicService.GetAllTopics();
-         LearnTopics = new SortedDictionary<LearnTopic, bool>(
-             learnTopics.ToDictionary(t => t, _ => false)
-         );
+         foreach (var topic in learnTopics) {
+            LearnTopics.Add(topic, false);
+         }
       } catch (Exception ex) {
          ErrorMessage = $"An error occurred while loading topics: {ex.Message}";
          Console.WriteLine($"Error details: {ex}");
@@ -91,7 +89,7 @@
          if (LearnTopics != null && TopicTitle != null && PageTitle != null) {
             var topic = LearnTopics.Keys.FirstOrDefault(t => ToUrlFriendly(t.Title) == TopicTitle);
             if (topic != null) {
-               SelectedPage = topic.Pages.FirstOrDefault(p => ToUrlFriendly(p.Title) == PageTitle) ?? topic.HomePage;
+               SelectedPage = topic.Pages.FirstOrDefault(p => ToUrlFriendly(p.Title) == PageTitle);
                if (SelectedPage != null) {
                   LearnTopics[topic] = true;
                }

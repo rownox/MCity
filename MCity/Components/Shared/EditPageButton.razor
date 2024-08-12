@@ -1,0 +1,13 @@
+﻿@inject NavigationManager NavigationManager
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<button @onclick="EditPage" class="btn">Edit Page</button>
+
+@code {
+   [Parameter]
+   public int Id { get; set; }
+
+   void EditPage() {
+      NavigationManager.NavigateTo("/learn/edit-page/" + Id);
+   }
+}

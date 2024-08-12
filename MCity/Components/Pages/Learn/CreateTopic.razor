@@ -4,38 +4,21 @@
 @inject NavigationManager NavigationManager
 @inject ILogger<CreateTopic> Logger
 
-<EditForm Model="@formModel" OnValidSubmit="HandleSubmit" FormName="createTopic">
+<EditForm Model="@learnTopic" OnValidSubmit="HandleSubmit" FormName="createTopic">
    <label>Topic Title</label>
-   <InputText @bind-Value="formModel.TopicTitle"></InputText>
-
-   <label>Home Page Title</label>
-   <InputText @bind-Value="formModel.PageTitle"></InputText>
+   <InputText @bind-Value="learnTopic.Title"></InputText>
 
    <button type="submit" class="btn">Submit</button>
 </EditForm>
 
 @code {
-   private class FormModel {
-      public string TopicTitle { get; set; } = string.Empty;
-      public string PageTitle { get; set; } = string.Empty; 
-   }
-
-   private FormModel formModel { get; set; } = new FormModel();
+   [SupplyParameterFromForm]
+   LearnTopic learnTopic { get; set; } = new LearnTopic {
+      Title = string.Empty
+   };
 
    private async Task HandleSubmit() {
-      if (string.IsNullOrWhiteSpace(formModel.TopicTitle) || string.IsNullOrWhiteSpace(formModel.PageTitle)) {
-         Logger.LogWarning("Titles are empty. Form submission cancelled.");
-         return;
-      }
-
-      LearnTopic learnTopic = new LearnTopic { Title = formModel.TopicTitle };
-      LearnPage learnPage = new LearnPage { Title = formModel.PageTitle };
-   
-      try {
-         await LearnTopicService.AddTopic(learnTopic, learnPage);
-         NavigationManager.NavigateTo("/learn");
-      } catch (Exception ex) {
-         Logger.LogError($"Error in AddTopic: {ex.Message}");
-      }
+      await LearnTopicService.AddTopic(learnTopic);
+      NavigationManager.NavigateTo("/learn");
    }
 }
