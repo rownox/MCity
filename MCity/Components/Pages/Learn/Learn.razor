@@ -3,6 +3,8 @@
 @inject ILearnPageService LearnPageService
 @inject ILearnTopicService LearnTopicService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@inject LocalStorageService localStorage
 @attribute [StreamRendering(true)]
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
@@ -15,12 +17,12 @@
 <div class="learn-ctnr">
    <div class="side-nav">
       @if (LearnTopics != null) {
-         <ul>
+         <ul class="topics-ctnr">
             @foreach (var container in LearnTopics) {
                var topic = container.Key;
                var isVisible = container.Value;
                <div class="topic" @key="topic.Id">
-                  <div class="title" @onclick="@(() => ToggleSubset(topic))">
+                  <div class="title" @onclick="@(async () => await ToggleSubset(topic))">
                      <p>@topic.Title</p>
                      <p id="drop-icon">@(isVisible ? "⯆" : "⯈")</p>
                   </div>
@@ -38,7 +40,6 @@
       } else {
          <p>Loading...</p>
       }
-
       <CreateTopicButton />
    </div>
    <div class="content">
@@ -78,6 +79,7 @@
          foreach (var topic in learnTopics) {
             LearnTopics.Add(topic, false);
          }
+         await LoadTopicState();
       } catch (Exception ex) {
          ErrorMessage = $"An error occurred while loading topics: {ex.Message}";
          Console.WriteLine($"Error details: {ex}");
@@ -101,9 +103,10 @@
       }
    }
 
-   private void ToggleSubset(LearnTopic topic) {
+   private async Task ToggleSubset(LearnTopic topic) {
       if (LearnTopics != null && LearnTopics.ContainsKey(topic)) {
          LearnTopics[topic] = !LearnTopics[topic];
+         await SaveTopicState();
       }
    }
 
@@ -117,4 +120,20 @@
    private static string ToUrlFriendly(string? title) =>
        Uri.EscapeDataString(title?.Replace(" ", "-").ToLower() ?? string.Empty);
 
+
+   private async Task SaveTopicState() {
+      var openTopics = LearnTopics.Where(kvp => kvp.Value).Select(kvp => kvp.Key.Id).ToList();
+      var json = System.Text.Json.JsonSerializer.Serialize(openTopics);
+      await localStorage.SetItem("openTopics", json);
+   }
+
+   private async Task LoadTopicState() {
+      var json = await localStorage.GetItem("openTopics");
+      if (!string.IsNullOrEmpty(json)) {
+         var openTopicIds = System.Text.Json.JsonSerializer.Deserialize<List<int>>(json);
+         foreach (var topic in LearnTopics.Keys) {
+            LearnTopics[topic] = openTopicIds.Contains(topic.Id);
+         }
+      }
+   }
 }

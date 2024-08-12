@@ -4,12 +4,17 @@
 @inject NavigationManager NavigationManager
 @inject ILogger<CreateTopic> Logger
 
-<EditForm Model="@learnTopic" OnValidSubmit="HandleSubmit" FormName="createTopic">
-   <label>Topic Title</label>
-   <InputText @bind-Value="learnTopic.Title"></InputText>
-
-   <button type="submit" class="btn">Submit</button>
-</EditForm>
+<div class="learn-ctnr">
+   <div class="form-ctnr">
+      <p class="title">Create Topic</p>
+      <EditForm class="form" Model="@learnTopic" OnValidSubmit="HandleSubmit" FormName="createTopic">
+         <label>Title</label>
+         <InputText class="input" @bind-Value="learnTopic.Title"></InputText>
+         <button type="submit" class="btn">Submit</button>
+         <a href="/learn" class="btn">Return Home</a>
+      </EditForm>
+   </div>
+</div>
 
 @code {
    [SupplyParameterFromForm]

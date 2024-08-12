@@ -1,15 +1,23 @@
 ﻿@page "/learn/edit-page/{id:int}"
 @inject ILearnPageService LearnPageService
 
-<EditForm Model="learnPage" OnSubmit="HandleSubmit" FormName="createPage">
-   <label>Title</label>
-   <InputText @bind-Value="learnPage.Title">@learnPage.Title</InputText>
 
-   <label>Content</label>
-   <InputText @bind-Value="learnPage.Content">@learnPage.Content</InputText>
+<div class="learn-ctnr">
+   <div class="form-ctnr">
+      <p class="title">Edit Page #@Id</p>
+      <EditForm class="form" Model="learnPage" OnSubmit="HandleSubmit" FormName="createPage">
+         <label>Title</label>
+         <InputText class="input" @bind-Value="learnPage.Title">@learnPage.Title</InputText>
 
-   <button type="submit" class="btn">Submit</button>
-</EditForm>
+         <label>Content</label>
+         <InputText class="input" @bind-Value="learnPage.Content">@learnPage.Content</InputText>
+
+         <button type="submit" class="btn">Submit</button>
+      </EditForm>
+   </div>
+</div>
+
+
 
 @code {
    [Parameter]
