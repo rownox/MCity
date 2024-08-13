@@ -3,8 +3,6 @@
 @inject ILearnPageService LearnPageService
 @inject ILearnTopicService LearnTopicService
 @inject NavigationManager NavigationManager
-@inject IJSRuntime JSRuntime
-@inject LocalStorageService localStorage
 @attribute [StreamRendering(true)]
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
@@ -22,7 +20,7 @@
                var topic = container.Key;
                var isVisible = container.Value;
                <div class="topic" @key="topic.Id">
-                  <div class="title" @onclick="@(async () => await ToggleSubset(topic))">
+                  <div class="title" @onclick="@(() => ToggleSubset(topic))">
                      <p>@topic.Title</p>
                      <p id="drop-icon">@(isVisible ? "⯆" : "⯈")</p>
                   </div>
@@ -77,9 +75,8 @@
       try {
          var learnTopics = await LearnTopicService.GetAllTopics();
          foreach (var topic in learnTopics) {
-            LearnTopics.Add(topic, false);
+            LearnTopics.Add(topic, LearnPageState.OpenTopicIds.Contains(topic.Id));
          }
-         await LoadTopicState();
       } catch (Exception ex) {
          ErrorMessage = $"An error occurred while loading topics: {ex.Message}";
          Console.WriteLine($"Error details: {ex}");
@@ -94,6 +91,7 @@
                SelectedPage = topic.Pages.FirstOrDefault(p => ToUrlFriendly(p.Title) == PageTitle);
                if (SelectedPage != null) {
                   LearnTopics[topic] = true;
+                  LearnPageState.OpenTopicIds.Add(topic.Id);
                }
             }
          }
@@ -103,10 +101,14 @@
       }
    }
 
-   private async Task ToggleSubset(LearnTopic topic) {
+   private void ToggleSubset(LearnTopic topic) {
       if (LearnTopics != null && LearnTopics.ContainsKey(topic)) {
          LearnTopics[topic] = !LearnTopics[topic];
-         await SaveTopicState();
+         if (LearnTopics[topic]) {
+            LearnPageState.OpenTopicIds.Add(topic.Id);
+         } else {
+            LearnPageState.OpenTopicIds.Remove(topic.Id);
+         }
       }
    }
 
@@ -120,20 +122,11 @@
    private static string ToUrlFriendly(string? title) =>
        Uri.EscapeDataString(title?.Replace(" ", "-").ToLower() ?? string.Empty);
 
-
-   private async Task SaveTopicState() {
-      var openTopics = LearnTopics.Where(kvp => kvp.Value).Select(kvp => kvp.Key.Id).ToList();
-      var json = System.Text.Json.JsonSerializer.Serialize(openTopics);
-      await localStorage.SetItem("openTopics", json);
-   }
-
-   private async Task LoadTopicState() {
-      var json = await localStorage.GetItem("openTopics");
-      if (!string.IsNullOrEmpty(json)) {
-         var openTopicIds = System.Text.Json.JsonSerializer.Deserialize<List<int>>(json);
-         foreach (var topic in LearnTopics.Keys) {
-            LearnTopics[topic] = openTopicIds.Contains(topic.Id);
-         }
+   private void ResetTopics() {
+      LearnPageState.OpenTopicIds.Clear();
+      foreach (var topic in LearnTopics.Keys.ToList()) {
+         LearnTopics[topic] = false;
       }
+      StateHasChanged();
    }
 }
