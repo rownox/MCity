@@ -1,5 +1,5 @@
 ﻿@page "/learn/create-topic"
-@inject ILearnPageService LearnPageService
+@inject IPageService LearnPageService
 @inject ILearnTopicService LearnTopicService
 @inject NavigationManager NavigationManager
 @inject ILogger<CreateTopic> Logger
@@ -18,7 +18,7 @@
 
 @code {
    [SupplyParameterFromForm]
-   LearnTopic learnTopic { get; set; } = new LearnTopic {
+   Topic learnTopic { get; set; } = new Topic {
       Title = string.Empty
    };
 
