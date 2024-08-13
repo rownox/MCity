@@ -1,6 +1,6 @@
-﻿using MCity.Models;
+﻿using API.Models;
 
-namespace MCity.Services {
+namespace MCity.Client.Services {
    public interface ILearnPageService {
       Task<List<LearnPage>> GetAllPages();
       Task<LearnPage?> GetPageById(int id);

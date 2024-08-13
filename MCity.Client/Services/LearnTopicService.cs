@@ -1,8 +1,8 @@
 ﻿using MCity.Data;
-using MCity.Models;
+using API.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace MCity.Services {
+namespace MCity.Client.Services {
    public class LearnTopicService : ILearnTopicService {
 
       private readonly ApplicationDbContext _context;

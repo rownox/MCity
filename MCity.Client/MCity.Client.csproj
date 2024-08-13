@@ -23,4 +23,6 @@
     <PackageReference Include="Toolbelt.AspNetCore.CssLiveReloader" Version="1.1.4" />
   </ItemGroup>
 
+  <Import Project="..\API\API.projitems" Label="Shared" />
+
 </Project>

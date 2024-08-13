@@ -1,4 +1,4 @@
-﻿namespace MCity.Models {
+﻿namespace API.Models {
    public class LearnPage {
       public int Id { get; set; }
       public string? Title { get; set; }

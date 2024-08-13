@@ -1,4 +1,4 @@
-using MCity.Models;
+using API.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

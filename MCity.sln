@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MCity", "MCity\MCity.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MCity.Client", "MCity.Client\MCity.Client.csproj", "{8660DC22-BC7C-41D9-82EB-F5AE771C9528}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "API", "API\API.shproj", "{8739F6CA-BEAC-4041-8A08-74FB22D6910B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,5 +29,9 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {26B1A504-1017-4121-A1E1-995E14EBC4A8}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		API\API.projitems*{8660dc22-bc7c-41d9-82eb-f5ae771c9528}*SharedItemsImports = 5
+		API\API.projitems*{8739f6ca-beac-4041-8a08-74fb22d6910b}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

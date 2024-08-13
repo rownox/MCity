@@ -1,6 +1,6 @@
-﻿using MCity.Models;
+﻿using API.Models;
 
-namespace MCity.Services {
+namespace MCity.Client.Services {
    public interface ILearnTopicService {
 
       Task<List<LearnTopic>> GetAllTopics();

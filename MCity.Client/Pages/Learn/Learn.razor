@@ -3,20 +3,21 @@
 @inject ILearnPageService LearnPageService
 @inject ILearnTopicService LearnTopicService
 @inject NavigationManager NavigationManager
-@attribute [StreamRendering(true)]
-@rendermode @(new InteractiveServerRenderMode(prerender: false))
 
 <PageTitle>Learn</PageTitle>
 
-@if (ErrorMessage != null) {
+@if (ErrorMessage != null)
+{
    <div class="alert alert-danger">@ErrorMessage</div>
 }
 
 <div class="learn-ctnr">
    <div class="side-nav">
-      @if (LearnTopics != null) {
+      @if (LearnTopics != null)
+      {
          <ul class="topics-ctnr">
-            @foreach (var container in LearnTopics) {
+            @foreach (var container in LearnTopics)
+            {
                var topic = container.Key;
                var isVisible = container.Value;
                <div class="topic" @key="topic.Id">
@@ -25,7 +26,8 @@
                      <p id="drop-icon">@(isVisible ? "⯆" : "⯈")</p>
                   </div>
                   <div class="subset" style="display: @(isVisible ? "flex" : "none");">
-                     @foreach (var subPage in topic.Pages) {
+                     @foreach (var subPage in topic.Pages)
+                     {
                         <a class="sub-item @(IsActivePage(subPage) ? "active" : "")"
                            @key="subPage.Id" href="@GetPageUrl(topic.Title, subPage.Title)">
                            @subPage.Title
@@ -35,19 +37,27 @@
                </div>
             }
          </ul>
-      } else {
+      }
+      else
+      {
          <p>Loading...</p>
       }
       <CreateTopicButton />
    </div>
    <div class="content">
-      @if (SelectedPage == null) {
+      @if (SelectedPage == null)
+      {
          <LearnHome />
-      } else {
+      }
+      else
+      {
          <p class="title">@SelectedPage.LearnTopic.Title - @SelectedPage.Title</p>
-         @if (SelectedPage.Content == null) {
+         @if (SelectedPage.Content == null)
+         {
             <ContentNotFound/>
-         } else {
+         }
+         else
+         {
             <div class="section filler break">
                <p class="subtitle">@SelectedPage.Content</p>
             </div>
@@ -71,48 +81,54 @@
    [Parameter] public string? PageTitle { get; set; }
    private string? ErrorMessage { get; set; }
 
-   protected override async Task OnInitializedAsync() {
-      try {
+   protected override async Task OnInitializedAsync()
+   {
+      try
+      {
          var learnTopics = await LearnTopicService.GetAllTopics();
-         foreach (var topic in learnTopics) {
-            LearnTopics.Add(topic, LearnPageState.OpenTopicIds.Contains(topic.Id));
+         foreach (var topic in learnTopics)
+         {
+            LearnTopics.Add(topic, false);
          }
-      } catch (Exception ex) {
+      }
+      catch (Exception ex)
+      {
          ErrorMessage = $"An error occurred while loading topics: {ex.Message}";
          Console.WriteLine($"Error details: {ex}");
       }
    }
 
-   protected override void OnParametersSet() {
-      try {
-         if (LearnTopics != null && TopicTitle != null && PageTitle != null) {
+   protected override void OnParametersSet()
+   {
+      try
+      {
+         if (LearnTopics != null && TopicTitle != null && PageTitle != null)
+         {
             var topic = LearnTopics.Keys.FirstOrDefault(t => ToUrlFriendly(t.Title) == TopicTitle);
-            if (topic != null) {
+            if (topic != null)
+            {
                SelectedPage = topic.Pages.FirstOrDefault(p => ToUrlFriendly(p.Title) == PageTitle);
-               if (SelectedPage != null) {
+               if (SelectedPage != null)
+               {
                   LearnTopics[topic] = true;
-                  LearnPageState.OpenTopicIds.Add(topic.Id);
                }
             }
          }
-      } catch (Exception ex) {
+      }
+      catch (Exception ex)
+      {
          ErrorMessage = $"An error occurred while setting parameters: {ex.Message}";
          Console.WriteLine($"Error details: {ex}");
       }
    }
 
-   private void ToggleSubset(LearnTopic topic) {
-      if (LearnTopics != null && LearnTopics.ContainsKey(topic)) {
+   private void ToggleSubset(LearnTopic topic)
+   {
+      if (LearnTopics != null && LearnTopics.ContainsKey(topic))
+      {
          LearnTopics[topic] = !LearnTopics[topic];
-         if (LearnTopics[topic]) {
-            LearnPageState.OpenTopicIds.Add(topic.Id);
-         } else {
-            LearnPageState.OpenTopicIds.Remove(topic.Id);
-         }
       }
    }
-
-   private void SelectPage(LearnPage page) => SelectedPage = page;
 
    private bool IsActivePage(LearnPage page) => SelectedPage == page;
 
@@ -121,12 +137,4 @@
 
    private static string ToUrlFriendly(string? title) =>
        Uri.EscapeDataString(title?.Replace(" ", "-").ToLower() ?? string.Empty);
-
-   private void ResetTopics() {
-      LearnPageState.OpenTopicIds.Clear();
-      foreach (var topic in LearnTopics.Keys.ToList()) {
-         LearnTopics[topic] = false;
-      }
-      StateHasChanged();
-   }
 }
