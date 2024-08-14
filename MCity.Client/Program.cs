@@ -11,6 +11,6 @@ builder.Services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticat
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<ILearnTopicService, LearnTopicService>();
-builder.Services.AddScoped<ILearnPageService, LearnPageService>();
+builder.Services.AddScoped<IPageService, PageService>();
 
 await builder.Build().RunAsync();
