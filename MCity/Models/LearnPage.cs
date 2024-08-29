@@ -11,5 +11,6 @@
 
       public int LearnTopicId { get; set; }
       public LearnTopic LearnTopic { get; set; }
+
    }
 }
