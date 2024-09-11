@@ -26,11 +26,14 @@
                   </div>
                   <div class="subset" style="display: @(isVisible ? "flex" : "none");">
                      @foreach (var subPage in topic.Pages) {
-                        <a class="sub-item @(IsActivePage(subPage) ? "active" : "")"
-                           @key="subPage.Id" href="@GetPageUrl(topic.Title, subPage.Title)">
-                           @subPage.Title
-                        </a>
+                        <a 
+                           class="sub-item @(IsActivePage(subPage) ? "active" : "")" 
+                           @key="subPage.Id" 
+                           href="@GetPageUrl(topic.Title, subPage.Title)">└ @subPage.Title</a>
                      }
+                     <a class="sub-item" >
+                        + Add Page
+                     </a>
                   </div>
                </div>
             }
