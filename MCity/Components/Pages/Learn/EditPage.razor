@@ -5,7 +5,7 @@
 <div class="learn-ctnr">
    <div class="form-ctnr">
       <p class="title">Edit Page #@Id</p>
-      <EditForm class="form" Model="learnPage" OnSubmit="HandleSubmit" FormName="createPage">
+      <EditForm class="form" Model="learnPage" OnSubmit="HandleSubmit" FormName="editPage">
          <label>Title</label>
          <InputText class="input" @bind-Value="learnPage.Title">@learnPage.Title</InputText>
 
@@ -24,9 +24,10 @@
    [SupplyParameterFromForm]
    LearnPage learnPage { get; set; } = new LearnPage { 
       Title = string.Empty,
+      Content = string.Empty
    };
 
    async Task HandleSubmit() {
-      await LearnPageService.AddPage(learnPage);
+      await LearnPageService.UpdatePage(learnPage);
    }
 }

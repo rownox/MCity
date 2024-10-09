@@ -1,13 +1,18 @@
 ﻿@inject NavigationManager NavigationManager
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
-<button @onclick="EditPage" class="btn">Edit Page</button>
+<button @onclick="EditPage" class="btn">Edit Page @Id</button>
 
 @code {
    [Parameter]
    public int Id { get; set; }
 
+   protected override void OnInitialized() {
+      Console.WriteLine($"EditPageButton initialized with Id: {Id}");
+   }
+
    void EditPage() {
+      Console.WriteLine($"Navigating to edit page with Id: {Id}");
       NavigationManager.NavigateTo("/learn/edit-page/" + Id);
    }
 }

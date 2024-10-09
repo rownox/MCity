@@ -48,6 +48,7 @@
          <LearnHome />
       } else {
          <p class="title">@SelectedPage.LearnTopic.Title - @SelectedPage.Title</p>
+         <p class="title">ID: @SelectedPage.Id</p>
          @if (SelectedPage.Content == null) {
             <ContentNotFound/>
          } else {
@@ -61,7 +62,7 @@
             <div class="section">
                <p>Last Edited By: @SelectedPage.LastEditedBy - @SelectedPage.LastEdited</p>
             </div>
-            <EditPageButton Id="SelectedPage.Id" />
+            <EditPageButton Id="@SelectedPage.Id" />
          }
       }
    </div>
