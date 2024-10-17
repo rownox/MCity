@@ -103,8 +103,8 @@ body {
 
 				.learn-ctnr .side-nav .topics-ctnr .topic .title {
 					display: flex;
-					justify-content: space-between;
-					padding: 3px;
+					padding: 5px;
+					gap: 10px;
 					/*                background: linear-gradient(90deg, var(--gray1), var(--gray2), var(--gray3) 100%);*/
 					cursor: pointer;
 					user-select: none;

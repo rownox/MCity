@@ -21,8 +21,8 @@
                var isVisible = container.Value;
                <div class="topic" @key="topic.Id">
                   <div class="title" @onclick="@(() => ToggleSubset(topic))">
-                     <p>@topic.Title</p>
                      <p id="drop-icon">@(isVisible ? "⯆" : "⯈")</p>
+                     <p>@topic.Title</p>
                   </div>
                   <div class="subset" style="display: @(isVisible ? "flex" : "none");">
                      @foreach (var subPage in topic.Pages) {
@@ -33,6 +33,9 @@
                      }
                      <a class="sub-item" >
                         + Add Page
+                     </a>
+                     <a class="sub-item">
+                        + Add Sub Topic
                      </a>
                   </div>
                </div>
@@ -47,21 +50,23 @@
       @if (SelectedPage == null) {
          <LearnHome />
       } else {
-         <p class="title">@SelectedPage.LearnTopic.Title - @SelectedPage.Title</p>
-         @if (SelectedPage.Content == null) {
-            <ContentNotFound Id="@SelectedPage.Id" />
-         } else {
-            <div class="section filler break">
-               <p class="subtitle">@SelectedPage.Content</p>
-            </div>
-            <div class="section break">
-               <p class="title">Sources</p>
-               <p class="subtitle">@SelectedPage.Source</p>
-            </div>
-            <div class="section">
-               <p>Last Edited By: @SelectedPage.LastEditedBy - @SelectedPage.LastEdited</p>
-            </div>
-            <EditPageButton Id="@SelectedPage.Id" />
+         if (SelectedPage.LearnTopic != null) {
+            <p class="title">@SelectedPage.LearnTopic.Title - @SelectedPage.Title</p>
+            @if (SelectedPage.Content == null) {
+               <ContentNotFound Id="@SelectedPage.Id" />
+            } else {
+               <div class="section filler break">
+                  <p class="subtitle">@SelectedPage.Content</p>
+               </div>
+               <div class="section break">
+                  <p class="title">Sources</p>
+                  <p class="subtitle">@SelectedPage.Source</p>
+               </div>
+               <div class="section">
+                  <p>Last Edited By: @SelectedPage.LastEditedBy - @SelectedPage.LastEdited</p>
+               </div>
+               <EditPageButton Id="@SelectedPage.Id" />
+            }
          }
       }
    </div>

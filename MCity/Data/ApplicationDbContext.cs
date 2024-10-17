@@ -24,6 +24,12 @@ namespace MCity.Data {
              .WithOne(lp => lp.LearnTopic)
              .HasForeignKey(lp => lp.LearnTopicId)
              .IsRequired(false);
+
+         modelBuilder.Entity<LearnTopic>()
+             .HasMany(pt => pt.SubTopics)
+             .WithOne(lt => lt.ParentTopic)
+             .HasForeignKey(lt => lt.ParentTopicId)
+             .IsRequired(false);
       }
    }
 }
