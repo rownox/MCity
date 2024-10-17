@@ -39,14 +39,37 @@ namespace MCity.Services {
       }
 
       public async Task<List<LearnTopic>> GetTopLevelTopics() {
-         return await _context.LearnTopics
+         var topics = await _context.LearnTopics
              .Where(t => t.ParentTopicId == null)
              .Include(t => t.Pages)
-             .Include(t => t.SubTopics)
-             .ThenInclude(st => st.Pages)
-             .Include(t => t.SubTopics)
-             .ThenInclude(st => st.SubTopics)
              .ToListAsync();
+
+         foreach (var topic in topics) {
+            await LoadSubTopicsRecursive(topic);
+         }
+
+         return topics;
+      }
+
+      private async Task LoadSubTopicsRecursive(LearnTopic topic) {
+         await _context.Entry(topic)
+             .Collection(t => t.SubTopics)
+             .Query()
+             .Include(t => t.Pages)
+             .LoadAsync();
+
+         foreach (var subTopic in topic.SubTopics) {
+            await LoadSubTopicsRecursive(subTopic);
+         }
+      }
+
+
+      public async Task<LearnTopic?> GetTopicById(int id) {
+         var learnTopic = await _context.LearnTopics
+            .Include(l => l.Pages)
+            .Include(l => l.SubTopics)
+            .FirstOrDefaultAsync(l => l.Id == id);
+         return learnTopic;
       }
    }
 }

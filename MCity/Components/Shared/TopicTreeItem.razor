@@ -1,5 +1,7 @@
 ﻿@inject ILearnPageState LearnPageState
 @inject NavigationManager NavigationManager
+@inject ILearnPageService LearnPageService
+@inject ILearnTopicService LearnTopicService
 
 <div class="topic" @key="Topic.Id">
    <div class="title" @onclick="() => LearnPageState.ToggleTopicVisibility(Topic.Id)">
@@ -10,17 +12,11 @@
       @foreach (var subPage in Topic.Pages) {
          <a class="sub-item @(LearnPageState.SelectedPageId == subPage.Id ? "active" : "")"
             @key="subPage.Id"
-            @onclick="() => SelectPage(subPage.Id)">└ @subPage.Title</a>
+            @onclick="() => SelectPage(subPage.Id)">@subPage.Title</a>
       }
       @foreach (var subTopic in Topic.SubTopics) {
          <TopicTreeItem Topic="subTopic" />
       }
-      <a class="sub-item" @onclick="AddPage">
-         + Add Page
-      </a>
-      <a class="sub-item" @onclick="AddSubTopic">
-         + Add Sub Topic
-      </a>
    </div>
 </div>
 
@@ -30,14 +26,6 @@
    private void SelectPage(int pageId) {
       LearnPageState.SelectedPageId = pageId;
       NavigationManager.NavigateTo($"/learn/{ToUrlFriendly(Topic.Title)}/{ToUrlFriendly(Topic.Pages.First(p => p.Id == pageId).Title)}");
-   }
-
-   private void AddPage() {
-      // Implement logic to add a new page
-   }
-
-   private void AddSubTopic() {
-      // Implement logic to add a new subtopic
    }
 
    private static string ToUrlFriendly(string? title) =>

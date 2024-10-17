@@ -5,5 +5,6 @@ namespace MCity.Services {
       Task<List<LearnTopic>> GetAllTopics();
       Task<List<LearnTopic>> GetTopLevelTopics();
       Task<LearnTopic?> AddTopic(LearnTopic learnTopic);
+      Task<LearnTopic?> GetTopicById(int id);
    }
 }
