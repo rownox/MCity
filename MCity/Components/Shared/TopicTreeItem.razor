@@ -1,0 +1,45 @@
+﻿@inject ILearnPageState LearnPageState
+@inject NavigationManager NavigationManager
+
+<div class="topic" @key="Topic.Id">
+   <div class="title" @onclick="() => LearnPageState.ToggleTopicVisibility(Topic.Id)">
+      <p id="drop-icon">@(LearnPageState.OpenTopicIds.Contains(Topic.Id) ? "⯆" : "⯈")</p>
+      <p>@Topic.Title</p>
+   </div>
+   <div class="subset" style="display: @(LearnPageState.OpenTopicIds.Contains(Topic.Id) ? "flex" : "none");">
+      @foreach (var subPage in Topic.Pages) {
+         <a class="sub-item @(LearnPageState.SelectedPageId == subPage.Id ? "active" : "")"
+            @key="subPage.Id"
+            @onclick="() => SelectPage(subPage.Id)">└ @subPage.Title</a>
+      }
+      @foreach (var subTopic in Topic.SubTopics) {
+         <TopicTreeItem Topic="subTopic" />
+      }
+      <a class="sub-item" @onclick="AddPage">
+         + Add Page
+      </a>
+      <a class="sub-item" @onclick="AddSubTopic">
+         + Add Sub Topic
+      </a>
+   </div>
+</div>
+
+@code {
+   [Parameter] public LearnTopic Topic { get; set; } = null!;
+
+   private void SelectPage(int pageId) {
+      LearnPageState.SelectedPageId = pageId;
+      NavigationManager.NavigateTo($"/learn/{ToUrlFriendly(Topic.Title)}/{ToUrlFriendly(Topic.Pages.First(p => p.Id == pageId).Title)}");
+   }
+
+   private void AddPage() {
+      // Implement logic to add a new page
+   }
+
+   private void AddSubTopic() {
+      // Implement logic to add a new subtopic
+   }
+
+   private static string ToUrlFriendly(string? title) =>
+       Uri.EscapeDataString(title?.Replace(" ", "-").ToLower() ?? string.Empty);
+}

@@ -94,11 +94,13 @@ body {
 			width: 100%;
 			height: fit-content;
 			margin-bottom: 20px;
+			border: 1px solid red;
 		}
 
 			.learn-ctnr .side-nav .topics-ctnr .topic {
 				border-bottom: 1px solid var(--gray4);
 				transition-delay: 2s;
+				
 			}
 
 				.learn-ctnr .side-nav .topics-ctnr .topic .title {
@@ -122,6 +124,8 @@ body {
 				.learn-ctnr .side-nav .topics-ctnr .topic .subset {
 					display: flex;
 					flex-direction: column;
+					border: 1px solid green;
+					padding-left: 10px;
 				}
 
 					.learn-ctnr .side-nav .topics-ctnr .topic .subset .sub-item {
