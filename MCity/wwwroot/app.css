@@ -15,7 +15,7 @@
 * {
 	padding: 0;
 	margin: 0;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-family: "Segoe UI", SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 html {
@@ -44,8 +44,6 @@ body {
 	padding-top: 50px;
 	display: flex;
 }
-
-
 
 	.learn-ctnr .form-ctnr {
 		display: flex;
@@ -81,7 +79,6 @@ body {
 				width: fit-content;
 			}
 
-
 	.learn-ctnr .side-nav {
 		width: 250px;
 	}
@@ -89,6 +86,30 @@ body {
 		.learn-ctnr .side-nav .active {
 			color: var(--green1) !important;
 		}
+
+		.learn-ctnr .side-nav .topic-header-ctnr {
+			width: 100%;
+			height: fit-content;
+			margin-bottom: 20px;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			
+		}
+
+			.learn-ctnr .side-nav .topic-header-ctnr .title {
+				width: 100%;
+				font-weight: 500;
+			}
+
+			.learn-ctnr .side-nav .topic-header-ctnr .search {
+				width: 100%;
+				height: 30px;
+				background-color: var(--gray1);
+				border: 1px solid var(--gray5);
+				padding: 0 7px;
+				font-size: 14px;
+			}
 
 		.learn-ctnr .side-nav .topics-ctnr {
 			width: 100%;
@@ -102,38 +123,32 @@ body {
 
 				.learn-ctnr .side-nav .topics-ctnr .topic .title {
 					display: flex;
-					padding: 5px;
+					padding: 4px 0;
 					gap: 10px;
-					/*                background: linear-gradient(90deg, var(--gray1), var(--gray2), var(--gray3) 100%);*/
 					cursor: pointer;
 					user-select: none;
 				}
 
-					.learn-ctnr .side-nav .topics-ctnr .topic .title:hover {
-						background-color: var(--gray2);
-					}
-
 					.learn-ctnr .side-nav .topics-ctnr .topic .title p {
-						line-height: 18px;
 						text-align: center;
 					}
 
 				.learn-ctnr .side-nav .topics-ctnr .topic .subset {
 					display: flex;
 					flex-direction: column;
-					padding-left: 10px;
+					padding-left: 25px;
 				}
 
 					.learn-ctnr .side-nav .topics-ctnr .topic .subset .sub-item {
 						cursor: pointer;
 						user-select: none;
-						padding: 2px 15px;
+						padding: 1px;
 						text-decoration: none;
 						color: var(--text2);
 					}
 
 						.learn-ctnr .side-nav .topics-ctnr .topic .subset .sub-item:hover {
-							background-color: var(--gray2);
+							text-decoration: underline;
 						}
 
 	.learn-ctnr .content {
