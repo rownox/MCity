@@ -1,5 +1,14 @@
 ﻿namespace MCity.Helpers {
-	public static class LearnPageState {
-		public static HashSet<int> OpenTopicIds { get; set; } = new HashSet<int>();
-	}
+   public class LearnPageState : ILearnPageState {
+      public HashSet<int> OpenTopicIds { get; } = new HashSet<int>();
+      public int? SelectedPageId { get; set; }
+
+      public void ToggleTopicVisibility(int topicId) {
+         if (OpenTopicIds.Contains(topicId)) {
+            OpenTopicIds.Remove(topicId);
+         } else {
+            OpenTopicIds.Add(topicId);
+         }
+      }
+   }
 }

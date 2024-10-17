@@ -97,7 +97,6 @@ body {
 		}
 
 			.learn-ctnr .side-nav .topics-ctnr .topic {
-				border-bottom: 1px solid var(--gray4);
 				transition-delay: 2s;
 			}
 
@@ -122,6 +121,7 @@ body {
 				.learn-ctnr .side-nav .topics-ctnr .topic .subset {
 					display: flex;
 					flex-direction: column;
+					padding-left: 10px;
 				}
 
 					.learn-ctnr .side-nav .topics-ctnr .topic .subset .sub-item {

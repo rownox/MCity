@@ -1,6 +1,7 @@
 using MCity.Components;
 using MCity.Components.Account;
 using MCity.Data;
+using MCity.Helpers;
 using MCity.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -30,6 +31,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<ILearnPageService, LearnPageService>();
 builder.Services.AddScoped<ILearnTopicService, LearnTopicService>();
+builder.Services.AddScoped<ILearnPageState, LearnPageState>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
