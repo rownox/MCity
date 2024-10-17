@@ -48,9 +48,8 @@
          <LearnHome />
       } else {
          <p class="title">@SelectedPage.LearnTopic.Title - @SelectedPage.Title</p>
-         <p class="title">ID: @SelectedPage.Id</p>
          @if (SelectedPage.Content == null) {
-            <ContentNotFound/>
+            <ContentNotFound Id="@SelectedPage.Id" />
          } else {
             <div class="section filler break">
                <p class="subtitle">@SelectedPage.Content</p>

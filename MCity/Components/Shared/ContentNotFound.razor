@@ -7,11 +7,12 @@
          There is no content for this page yet.
       </p>
       <div class="options">
-         <EditPageButton/>
+         <EditPageButton Id="@Id" />
       </div>
    </div>
 </div>
 
 @code {
-
+   [Parameter]
+   public int Id { get; set; }
 }

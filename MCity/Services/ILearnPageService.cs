@@ -5,6 +5,6 @@ namespace MCity.Services {
       Task<List<LearnPage>> GetAllPages();
       Task<LearnPage?> GetPageById(int id);
       Task<LearnPage?> AddPage(LearnPage learnPage);
-      Task<LearnPage?> UpdatePage(LearnPage learnPage);
+      Task UpdatePage(LearnPage learnPage);
    }
 }

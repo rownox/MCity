@@ -1,16 +1,23 @@
 ﻿@page "/learn/edit-page/{id:int}"
+@inject NavigationManager Navigation
 @inject ILearnPageService LearnPageService
 
 
 <div class="learn-ctnr">
    <div class="form-ctnr">
-      <p class="title">Edit Page #@Id</p>
-      <EditForm class="form" Model="learnPage" OnSubmit="HandleSubmit" FormName="editPage">
+      <p class="title">Edit Page #@id</p>
+      <EditForm class="form" Model="@learnPage" OnValidSubmit="HandleSubmit" FormName="editPage">
+         <DataAnnotationsValidator />
+         <ValidationSummary />
+
+         <label>Topic ID</label>
+         <InputNumber class="input" @bind-Value="learnPage.LearnTopicId">@learnPage.LearnTopicId</InputNumber>
+
          <label>Title</label>
          <InputText class="input" @bind-Value="learnPage.Title">@learnPage.Title</InputText>
 
          <label>Content</label>
-         <InputText class="input" @bind-Value="learnPage.Content">@learnPage.Content</InputText>
+         <InputTextArea class="input" @bind-Value="learnPage.Content">@learnPage.Content</InputTextArea>
 
          <button type="submit" class="btn">Submit</button>
       </EditForm>
@@ -18,16 +25,21 @@
 </div>
 
 @code {
-   [Parameter]
-   public int Id { get; set; }
-
    [SupplyParameterFromForm]
-   LearnPage learnPage { get; set; } = new LearnPage { 
-      Title = string.Empty,
-      Content = string.Empty
-   };
+   private LearnPage learnPage { get; set; } = new LearnPage();
+
+   [Parameter]
+   public int id { get; set; }
+
+   protected override async Task OnInitializedAsync() {
+      var existingPage = await LearnPageService.GetPageById(id);
+      if (existingPage != null) {
+         learnPage = existingPage;
+      }
+   }
 
    async Task HandleSubmit() {
       await LearnPageService.UpdatePage(learnPage);
+      Navigation.NavigateTo("/learn");
    }
 }
