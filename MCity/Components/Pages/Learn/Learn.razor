@@ -84,12 +84,26 @@
                if (page != null) {
                   LearnPageState.SelectedPageId = page.Id;
                   LearnPageState.OpenTopicIds.Add(topic.Id);
+                  if (topic.ParentTopic != null) {
+                     openAllRelatedTopics(topic.ParentTopic.Id);
+                  }
                }
             }
          }
       } catch (Exception ex) {
          ErrorMessage = $"An error occurred while setting parameters: {ex.Message}";
          Console.WriteLine($"Error details: {ex}");
+      }
+   }
+
+   private void openAllRelatedTopics(int id) {
+      var topic = FindTopic(LearnTopics, id);
+      LearnPageState.OpenTopicIds.Add(id);
+
+      if (topic != null) {
+         if (topic.ParentTopic != null) {
+            openAllRelatedTopics(topic.ParentTopic.Id);
+         }
       }
    }
 

@@ -42,18 +42,8 @@
    }
 
    async Task HandleSubmit() {
-      Console.ForegroundColor = ConsoleColor.Yellow;
-      Console.WriteLine($"Submitting updates for page ID {learnPage.Id}");
-      Console.WriteLine($"Topic ID: {learnPage.LearnTopicId}, Title: {learnPage.Title}, Content: {learnPage.Content}");
-      Console.ResetColor();
       await LearnPageService.UpdatePage(learnPage);
       Navigation.NavigateTo("/learn");
+      Navigation.NavigateTo($"/learn/{learnPage.LearnTopicId}/{id}");
    }
-
-   private void HandleFieldChanged(object? sender, FieldChangedEventArgs e) {
-      Console.ForegroundColor = ConsoleColor.Yellow;
-      Console.WriteLine($"Field {e.FieldIdentifier.FieldName} changed to: {e.FieldIdentifier.Model}");
-      Console.ResetColor();
-   }
-
 }
