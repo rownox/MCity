@@ -12,7 +12,7 @@
       @foreach (var subPage in Topic.Pages) {
          <a class="sub-item @(LearnPageState.SelectedPageId == subPage.Id ? "active" : "")"
             @key="subPage.Id"
-            @onclick="() => SelectPage(subPage.Id)">@subPage.Title</a>
+            @onclick="() => SelectPage(Topic.Id, subPage.Id)">@subPage.Title</a>
       }
       @foreach (var subTopic in Topic.SubTopics) {
          <TopicTreeItem Topic="subTopic" />
@@ -23,11 +23,8 @@
 @code {
    [Parameter] public LearnTopic Topic { get; set; } = null!;
 
-   private void SelectPage(int pageId) {
+   private void SelectPage(int topicId, int pageId) {
       LearnPageState.SelectedPageId = pageId;
-      NavigationManager.NavigateTo($"/learn/{ToUrlFriendly(Topic.Title)}/{ToUrlFriendly(Topic.Pages.First(p => p.Id == pageId).Title)}");
+      NavigationManager.NavigateTo($"/learn/{topicId}/{pageId}");
    }
-
-   private static string ToUrlFriendly(string? title) =>
-       Uri.EscapeDataString(title?.Replace(" ", "-").ToLower() ?? string.Empty);
 }

@@ -1,32 +1,33 @@
 ﻿@page "/learn/edit-page/{id:int}"
 @inject NavigationManager Navigation
 @inject ILearnPageService LearnPageService
+@rendermode InteractiveAuto
 
+@if (learnPage != null) {
+   <div class="learn-ctnr">
+      <div class="form-ctnr">
+         <p class="title">Edit Page #@id</p>
+         <EditForm class="form" Model="@learnPage" OnValidSubmit="HandleSubmit" FormName="editPage">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-<div class="learn-ctnr">
-   <div class="form-ctnr">
-      <p class="title">Edit Page #@id</p>
-      <EditForm class="form" Model="@learnPage" OnValidSubmit="HandleSubmit" FormName="editPage">
-         <DataAnnotationsValidator />
-         <ValidationSummary />
+            <label>Topic ID</label>
+            <InputNumber class="input" @bind-Value="learnPage.LearnTopicId" />
 
-         <label>Topic ID</label>
-         <InputNumber class="input" @bind-Value="learnPage.LearnTopicId">@learnPage.LearnTopicId</InputNumber>
+            <label>Title</label>
+            <InputText class="input" @bind-Value="learnPage.Title" />
 
-         <label>Title</label>
-         <InputText class="input" @bind-Value="learnPage.Title">@learnPage.Title</InputText>
+            <label>Content</label>
+            <InputTextArea class="input" @bind-Value="learnPage.Content" />
 
-         <label>Content</label>
-         <InputTextArea class="input" @bind-Value="learnPage.Content">@learnPage.Content</InputTextArea>
-
-         <button type="submit" class="btn">Submit</button>
-      </EditForm>
+            <button type="submit" class="btn">Submit</button>
+         </EditForm>
+      </div>
    </div>
-</div>
+}
 
 @code {
-   [SupplyParameterFromForm]
-   private LearnPage learnPage { get; set; } = new LearnPage();
+   private LearnPage? learnPage { get; set; }
 
    [Parameter]
    public int id { get; set; }
@@ -35,11 +36,24 @@
       var existingPage = await LearnPageService.GetPageById(id);
       if (existingPage != null) {
          learnPage = existingPage;
+      } else {
+         Console.WriteLine("Entity not found in the database.");
       }
    }
 
    async Task HandleSubmit() {
+      Console.ForegroundColor = ConsoleColor.Yellow;
+      Console.WriteLine($"Submitting updates for page ID {learnPage.Id}");
+      Console.WriteLine($"Topic ID: {learnPage.LearnTopicId}, Title: {learnPage.Title}, Content: {learnPage.Content}");
+      Console.ResetColor();
       await LearnPageService.UpdatePage(learnPage);
       Navigation.NavigateTo("/learn");
    }
+
+   private void HandleFieldChanged(object? sender, FieldChangedEventArgs e) {
+      Console.ForegroundColor = ConsoleColor.Yellow;
+      Console.WriteLine($"Field {e.FieldIdentifier.FieldName} changed to: {e.FieldIdentifier.Model}");
+      Console.ResetColor();
+   }
+
 }

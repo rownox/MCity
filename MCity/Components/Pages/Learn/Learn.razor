@@ -1,5 +1,5 @@
 ﻿@page "/learn"
-@page "/learn/{TopicTitle?}/{PageTitle?}"
+@page "/learn/{TopicId:int}/{PageId:int}"
 @inject ILearnPageService LearnPageService
 @inject ILearnTopicService LearnTopicService
 @inject ILearnPageState LearnPageState
@@ -58,8 +58,8 @@
 
 @code {
    private List<LearnTopic> LearnTopics { get; set; } = new List<LearnTopic>();
-   [Parameter] public string? TopicTitle { get; set; }
-   [Parameter] public string? PageTitle { get; set; }
+   [Parameter] public int? TopicId { get; set; }
+   [Parameter] public int? PageId { get; set; }
    private string? ErrorMessage { get; set; }
 
    private LearnPage? SelectedPage => LearnPageState.SelectedPageId.HasValue
@@ -77,10 +77,10 @@
 
    protected override void OnParametersSet() {
       try {
-         if (LearnTopics != null && TopicTitle != null && PageTitle != null) {
-            var topic = FindTopic(LearnTopics, TopicTitle);
+         if (LearnTopics != null && TopicId.HasValue && PageId.HasValue) {
+            var topic = FindTopic(LearnTopics, TopicId.Value);
             if (topic != null) {
-               var page = topic.Pages.FirstOrDefault(p => ToUrlFriendly(p.Title) == PageTitle);
+               var page = topic.Pages.FirstOrDefault(p => p.Id == PageId.Value);
                if (page != null) {
                   LearnPageState.SelectedPageId = page.Id;
                   LearnPageState.OpenTopicIds.Add(topic.Id);
@@ -93,12 +93,20 @@
       }
    }
 
-   private LearnTopic? FindTopic(List<LearnTopic> topics, string topicTitle) {
+   private void SelectPage(int pageId) {
+      LearnPageState.SelectedPageId = pageId;
+      var selectedPage = FindPage(LearnTopics, pageId);
+      if (selectedPage?.LearnTopic != null) {
+         NavigationManager.NavigateTo($"/learn/{selectedPage.LearnTopic.Id}/{pageId}");
+      }
+   }
+
+   private LearnTopic? FindTopic(List<LearnTopic> topics, int topicId) {
       foreach (var topic in topics) {
-         if (ToUrlFriendly(topic.Title) == topicTitle) {
+         if (topic.Id == topicId) {
             return topic;
          }
-         var subTopic = FindTopic(topic.SubTopics, topicTitle);
+         var subTopic = FindTopic(topic.SubTopics, topicId);
          if (subTopic != null) {
             return subTopic;
          }
@@ -119,7 +127,4 @@
       }
       return null;
    }
-
-   private static string ToUrlFriendly(string? title) =>
-       Uri.EscapeDataString(title?.Replace(" ", "-").ToLower() ?? string.Empty);
 }

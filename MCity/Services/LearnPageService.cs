@@ -25,14 +25,25 @@ namespace MCity.Services {
       }
 
       public async Task<LearnPage?> GetPageById(int id) {
-         var learnpage = await _context.LearnPages.FindAsync(id);
-         return learnpage;
+         var learnPage = await _context.LearnPages.FindAsync(id);
+         if (learnPage == null) {
+            Console.WriteLine($"No page found with ID {id}");
+         }
+         return learnPage;
       }
 
+
       public async Task UpdatePage(LearnPage learnPage) {
-         _context.Entry(learnPage).State = EntityState.Modified;
-         await _context.SaveChangesAsync();
+         var trackedEntity = await _context.LearnPages.FindAsync(learnPage.Id);
+         if (trackedEntity != null) {
+            _context.Entry(trackedEntity).CurrentValues.SetValues(learnPage);
+            await _context.SaveChangesAsync();
+         } else {
+            throw new InvalidOperationException("Entity not found in the database.");
+         }
       }
+
+
 
    }
 }
