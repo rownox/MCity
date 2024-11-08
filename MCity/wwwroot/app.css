@@ -84,7 +84,8 @@ body {
 	}
 
 		.learn-ctnr .side-nav .active {
-			color: var(--green1) !important;
+			color: var(--text1) !important;
+			background-color: var(--gray3);
 		}
 
 		.learn-ctnr .side-nav .topic-header-ctnr {
@@ -164,13 +165,13 @@ body {
 				.learn-ctnr .side-nav .topics-ctnr .topic .subset {
 					display: flex;
 					flex-direction: column;
-					padding-left: 25px;
+					padding-left: 20px;
 				}
 
 					.learn-ctnr .side-nav .topics-ctnr .topic .subset .sub-item {
 						cursor: pointer;
 						user-select: none;
-						padding: 1px;
+						padding: 1px 5px;
 						text-decoration: none;
 						color: var(--text2);
 					}
