@@ -1,0 +1,41 @@
+﻿@page "/learn/create-page/{id:int}"
+@inject ILearnPageService LearnPageService
+@inject ILearnTopicService LearnTopicService
+@inject NavigationManager NavigationManager
+@inject ILogger<CreateTopic> Logger
+@rendermode InteractiveAuto
+
+@if (LearnPage != null) {
+   <div class="learn-ctnr">
+      <div class="form-ctnr">
+         <p class="title">Create Page</p>
+         <EditForm class="form" Model="@LearnPage" OnValidSubmit="HandleSubmit" FormName="createPage">
+            <label>Title</label>
+            <InputText class="input" @bind-Value="LearnPage.Title" />
+            <button type="submit" class="btn">Submit</button>
+            <a href="/learn" class="btn">Return Home</a>
+         </EditForm>
+      </div>
+   </div>
+}
+
+@code {
+   [Parameter]
+   public int id { get; set; }
+
+   [SupplyParameterFromForm]
+   LearnPage? LearnPage { get; set; }
+
+   protected override async Task OnInitializedAsync() {
+      LearnPage = new LearnPage() {
+         LearnTopicId = id
+      };
+   }
+
+   private async Task HandleSubmit() {
+      if (LearnPage != null) {
+         await LearnPageService.AddPage(LearnPage);
+         NavigationManager.NavigateTo("/learn");
+      }
+   }
+}

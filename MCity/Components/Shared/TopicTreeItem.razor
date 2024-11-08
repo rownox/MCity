@@ -4,9 +4,16 @@
 @inject ILearnTopicService LearnTopicService
 
 <div class="topic" @key="Topic.Id">
-   <div class="title" @onclick="() => LearnPageState.ToggleTopicVisibility(Topic.Id)">
-      <p id="drop-icon">@(LearnPageState.OpenTopicIds.Contains(Topic.Id) ? "⯆" : "⯈")</p>
-      <p>@Topic.Title</p>
+   <div class="topic-title-ctnr">
+      <div class="left">
+         <div class="title" @onclick="() => LearnPageState.ToggleTopicVisibility(Topic.Id)">
+            <p id="drop-icon">@(LearnPageState.OpenTopicIds.Contains(Topic.Id) ? "⯆" : "⯈")</p>
+            <p>@Topic.Title</p>
+         </div>
+      </div>
+      <div class="right">
+         <CreatePageButton Id="@Topic.Id" />
+      </div>
    </div>
    <div class="subset" style="display: @(LearnPageState.OpenTopicIds.Contains(Topic.Id) ? "flex" : "none");">
       @foreach (var subPage in Topic.Pages) {

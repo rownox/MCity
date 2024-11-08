@@ -121,17 +121,45 @@ body {
 				transition-delay: 2s;
 			}
 
-				.learn-ctnr .side-nav .topics-ctnr .topic .title {
+				.learn-ctnr .side-nav .topics-ctnr .topic .topic-title-ctnr {
+					display: flex;
+					justify-content: space-between;
+				}
+
+				.learn-ctnr .side-nav .topics-ctnr .topic .left {
 					display: flex;
 					padding: 4px 0;
 					gap: 10px;
-					cursor: pointer;
 					user-select: none;
 				}
 
-					.learn-ctnr .side-nav .topics-ctnr .topic .title p {
-						text-align: center;
+					.learn-ctnr .side-nav .topics-ctnr .topic .left .title {
+						display: flex;
+						cursor: pointer;
+						user-select: none;
+						justify-content: space-between;
+						gap: 10px;
 					}
+
+				.learn-ctnr .side-nav .topics-ctnr .topic .right {
+					display: flex;
+					align-items: center;
+				}
+
+					.learn-ctnr .side-nav .topics-ctnr .topic .right .add-img {
+						height: 15px;
+						width: 15px;
+						filter: invert(70%);
+						cursor: pointer;
+					}
+
+						.learn-ctnr .side-nav .topics-ctnr .topic .right .add-img:hover {
+							filter: invert(100%);
+						}
+
+				.learn-ctnr .side-nav .topics-ctnr .topic .title p {
+					text-align: center;
+				}
 
 				.learn-ctnr .side-nav .topics-ctnr .topic .subset {
 					display: flex;
@@ -227,8 +255,6 @@ body {
 	border: 1px solid var(--gray5);
 	background-color: var(--gray2);
 	color: var(--text2);
-	padding: 5px 10px;
-	border-radius: 5px;
 	font-size: 15px;
 	text-decoration: none;
 }
@@ -236,4 +262,8 @@ body {
 	.btn:hover {
 		cursor: pointer;
 		color: var(--text1);
+	}
+
+	.btn.white {
+
 	}

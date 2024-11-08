@@ -1,0 +1,13 @@
+﻿@inject NavigationManager NavigationManager
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<img src="/images/add.svg" @onclick="CreatePage" class="add-img"/>
+
+@code {
+   [Parameter]
+   public int Id { get; set; }
+
+   void CreatePage() {
+      NavigationManager.NavigateTo("/learn/create-page/" + Id);
+   }
+}
