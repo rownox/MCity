@@ -37,7 +37,16 @@
          if (SelectedPage.LearnTopic != null) {
             <p class="title">@SelectedPage.LearnTopic.Title - @SelectedPage.Title</p>
             @if (SelectedPage.Content == null) {
-               <ContentNotFound Id="@SelectedPage.Id" />
+               if (SelectedPage.TreeModels.Count() <= 0) {
+                  <ContentNotFound Id="@SelectedPage.Id" />
+               } else {
+                  foreach (var member in SelectedPage.TreeModels.Where(m => m.ParentId == 0)) {
+                     <li>
+                        <strong>@member.Content</strong>
+                        @RenderChildren(member)
+                     </li>
+                  }
+               }
             } else {
                <div class="section filler break">
                   <p class="subtitle">@SelectedPage.Content</p>
@@ -141,4 +150,20 @@
       }
       return null;
    }
+
+   private RenderFragment RenderChildren(TreeModel parent) => builder =>
+    {
+       if (parent.Children.Any())
+       {
+          builder.OpenElement(0, "ul");
+          foreach (var child in parent.Children)
+          {
+             builder.OpenElement(1, "li");
+             builder.AddContent(2, $"{child.Content}");
+             builder.AddContent(3, RenderChildren(child));
+             builder.CloseElement();
+          }
+          builder.CloseElement();
+       }
+    };
 }

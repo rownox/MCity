@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MCity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240806153618_one")]
-    partial class one
+    [Migration("20241126161717_1")]
+    partial class _1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -113,13 +113,14 @@ namespace MCity.Migrations
                     b.Property<string>("LastEditedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LearnTopicId")
+                    b.Property<int>("LearnTopicId")
                         .HasColumnType("int");
 
                     b.Property<string>("Source")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -137,19 +138,45 @@ namespace MCity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("HomePageId")
+                    b.Property<int?>("ParentTopicId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HomePageId")
-                        .IsUnique()
-                        .HasFilter("[HomePageId] IS NOT NULL");
+                    b.HasIndex("ParentTopicId");
 
                     b.ToTable("LearnTopics");
+                });
+
+            modelBuilder.Entity("MCity.Models.TreeModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("LearnPageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LearnPageId");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("TreeModels");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -289,20 +316,32 @@ namespace MCity.Migrations
                 {
                     b.HasOne("MCity.Models.LearnTopic", "LearnTopic")
                         .WithMany("Pages")
-                        .HasForeignKey("LearnTopicId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("LearnTopicId");
 
                     b.Navigation("LearnTopic");
                 });
 
             modelBuilder.Entity("MCity.Models.LearnTopic", b =>
                 {
-                    b.HasOne("MCity.Models.LearnPage", "HomePage")
-                        .WithOne()
-                        .HasForeignKey("MCity.Models.LearnTopic", "HomePageId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                    b.HasOne("MCity.Models.LearnTopic", "ParentTopic")
+                        .WithMany("SubTopics")
+                        .HasForeignKey("ParentTopicId");
 
-                    b.Navigation("HomePage");
+                    b.Navigation("ParentTopic");
+                });
+
+            modelBuilder.Entity("MCity.Models.TreeModel", b =>
+                {
+                    b.HasOne("MCity.Models.LearnPage", null)
+                        .WithMany("TreeModels")
+                        .HasForeignKey("LearnPageId");
+
+                    b.HasOne("MCity.Models.TreeModel", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -356,9 +395,21 @@ namespace MCity.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MCity.Models.LearnPage", b =>
+                {
+                    b.Navigation("TreeModels");
+                });
+
             modelBuilder.Entity("MCity.Models.LearnTopic", b =>
                 {
                     b.Navigation("Pages");
+
+                    b.Navigation("SubTopics");
+                });
+
+            modelBuilder.Entity("MCity.Models.TreeModel", b =>
+                {
+                    b.Navigation("Children");
                 });
 #pragma warning restore 612, 618
         }

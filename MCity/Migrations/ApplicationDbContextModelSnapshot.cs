@@ -117,6 +117,7 @@ namespace MCity.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -146,6 +147,33 @@ namespace MCity.Migrations
                     b.HasIndex("ParentTopicId");
 
                     b.ToTable("LearnTopics");
+                });
+
+            modelBuilder.Entity("MCity.Models.TreeModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("LearnPageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LearnPageId");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("TreeModels");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -299,6 +327,20 @@ namespace MCity.Migrations
                     b.Navigation("ParentTopic");
                 });
 
+            modelBuilder.Entity("MCity.Models.TreeModel", b =>
+                {
+                    b.HasOne("MCity.Models.LearnPage", null)
+                        .WithMany("TreeModels")
+                        .HasForeignKey("LearnPageId");
+
+                    b.HasOne("MCity.Models.TreeModel", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Parent");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -350,11 +392,21 @@ namespace MCity.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MCity.Models.LearnPage", b =>
+                {
+                    b.Navigation("TreeModels");
+                });
+
             modelBuilder.Entity("MCity.Models.LearnTopic", b =>
                 {
                     b.Navigation("Pages");
 
                     b.Navigation("SubTopics");
+                });
+
+            modelBuilder.Entity("MCity.Models.TreeModel", b =>
+                {
+                    b.Navigation("Children");
                 });
 #pragma warning restore 612, 618
         }
